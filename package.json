@@ -1,5 +1,5 @@
 {
-  "name": "y",
+  "name": "lyp",
   "version": "1.0.0",
   "description": "y",
   "author": "y",
@@ -14,6 +14,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "ajv": "^6.9.1",
+    "element-ui": "^2.13.2",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
