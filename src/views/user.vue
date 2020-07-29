@@ -34,7 +34,7 @@ import {yearQuota} from "@/common/httpService";
 export default {
   data() {
     return {
-      tableData: {}
+      tableData: {},
     };
   },
   methods: {
