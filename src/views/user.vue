@@ -1,96 +1,57 @@
 <template>
-  <div style="padding:20px;" id="app">
-    <div class="panel panel-primary">
-      <div class="panel-heading">用户管理</div>
-      <table class="table table-bordered table-striped text-center">
-        <thead>
-          <tr>
-            <th>序号</th>
-            <th>用户名</th>
-            <th>年龄</th>
-            <th>毕业学校</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(user,key,index) in users">
-            <td>{{index+1}}</td>
-            <td>{{user.name}}</td>
-            <td>{{user.age}}</td>
-            <td>{{user.school}}</td>
-            <td>
-              <button v-on:click="remove(index)">remove</button>
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>
-              <input type="text" id="name" v-model="user.name" />
-            </td>
-            <td>
-              <input type="text" id="age" v-model="user.age" />
-            </td>
-            <td>
-              <input type="text" id="school" v-model="user.school" />
-            </td>
-            <td>
-              <button @click="insert">insert</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <div>
+    <el-table :data="tableData" stripe border style="width:100%" highlight-current-row>
+      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column prop="phone" label="手机号" align="center" min-width="120"></el-table-column>
+      <el-table-column prop="nickname" label="昵称" align="center" min-width="100"></el-table-column>
+      <el-table-column prop="createTime" label="注册时间" align="center" min-width="120"></el-table-column>
+      <el-table-column prop="enableState" label="用户状态" align="center" min-width="100"></el-table-column>
+      <el-table-column prop="tradeState" label="交易状态" align="center" min-width="100"></el-table-column>
+      <el-table-column label="操作" align="center" min-width="100">
+        <template slot-scope="scope">
+          <el-button type="text" @click="checkDetail(scope.row.phone)">查看详情</el-button>
+          <el-button type="info" @click="modifyUser(scope.row.phone)">修改</el-button>
+          <el-button type="info" @click="deleteUser(scope.row.phone)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div>
+      <el-upload
+        class="upload-demo btRight"
+        :action="spImportData"
+        :name="name"
+        :limit="1"
+        :on-success="afterSuccess"
+      >
+        <button class="bt importDataBt">导入</button>
+      </el-upload>
     </div>
   </div>
 </template>
+
 <script>
+import {yearQuota} from "@/common/httpService";
 export default {
-  name: "hello",
   data() {
     return {
-      user: { name: "", age: "", school: "" },
-      users: [
-        { name: "李磊", age: "25", school: "洛阳理工" },
-        { name: "张成", age: "23", school: "桂林电子科技" },
-        { name: "炼心", age: "22", school: "江西电子科技" }
-      ]
+      tableData: {}
     };
   },
-
   methods: {
-    insert: function() {
-      this.users.push(this.user);
+    //删除用户
+    deleteUser(val) {
+      console.log(val);
+
+      //这里写相应的逻辑，val是指传进来的参数也就是上面的scope.row.phone；也可以是scope.row.nickname等
     },
-    remove: function(index) {
-      this.users.splice(index, 1);
+    //修改用户
+    modifyUser(val) {
+      let self = this;
+    },
+    //查看详情
+    checkDetail(val) {
+      console.log(val);
     }
   }
 };
 </script>
-
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1,
-h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
-tr,
-th {
-  text-align: center;
-}
-</style>

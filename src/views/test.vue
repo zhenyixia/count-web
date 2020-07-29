@@ -6,7 +6,7 @@
 </template>
 <script>
 export default {
-  name: "Test",
+  name: "test",
   data() {
     return {
       msg: "welcome vue world"

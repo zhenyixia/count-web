@@ -1,14 +1,28 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
-import Test from '@views/test'
+import home from '@/common/home'
+import test from '@/views/test'
+import user from '@/views/user'
 
 const routerSet = {
-  routes: [{
+  routes: [
+    {
+      path: '/',
+      name:'home',
+      component: home
+    },
+    {
     path: '/test',
-    name:'Test',
-    component: Test
-  }]
+    name:'test',
+    component: test
+  },
+  {
+  path: '/user',
+  name:'user',
+  component: user
+}
+]
 }
 
 /* let boot = window.location.origin

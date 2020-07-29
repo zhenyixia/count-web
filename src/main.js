@@ -7,6 +7,7 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import echarts from 'echarts'
+import world from 'echarts/map/json/world.json'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
