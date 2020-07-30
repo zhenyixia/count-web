@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table :data="tableData" stripe border style="width:100%" highlight-current-row>
-      <el-table-column type="selection" width="55"></el-table-column>
+      <!-- <el-table-column type="selection" width="55"></el-table-column> -->
       <el-table-column prop="phone" label="手机号" align="center" min-width="120"></el-table-column>
       <el-table-column prop="nickname" label="昵称" align="center" min-width="100"></el-table-column>
       <el-table-column prop="createTime" label="注册时间" align="center" min-width="120"></el-table-column>
@@ -30,14 +30,23 @@
 </template>
 
 <script>
-import {yearQuota} from "@/common/httpService";
+import { yearQuota } from "@/common/httpService";
 export default {
   data() {
     return {
-      tableData: {},
+      tableData: {}
     };
   },
-  methods: {
+  //默认加载的方法
+  created: function(){
+    init()
+  },
+  methods:{
+    init(){
+      this.tableData = [{phone:123,nickname:'nike1',createTime:'2020-7-30',enableState:'active',tradeState:'active'}]
+
+    },
+
     //删除用户
     deleteUser(val) {
       console.log(val);
