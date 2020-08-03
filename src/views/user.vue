@@ -30,21 +30,31 @@
 </template>
 
 <script>
-import { yearQuota } from "@/common/httpService";
+import { yearQuota, spImportData } from "@/common/httpService";
 export default {
   data() {
     return {
-      tableData: {}
+      tableData: [],
+      name: null,
+      spImportData: ""
     };
   },
   //默认加载的方法
-  created: function(){
-    init()
+  created() {
+    this.init()
   },
-  methods:{
-    init(){
-      this.tableData = [{phone:123,nickname:'nike1',createTime:'2020-7-30',enableState:'active',tradeState:'active'}]
 
+  methods: {
+    init() {
+      this.tableData = [
+        {
+          phone: 123,
+          nickname: "nike1",
+          createTime: "2020-7-30",
+          enableState: "active",
+          tradeState: "active"
+        }
+      ];
     },
 
     //删除用户
@@ -60,7 +70,8 @@ export default {
     //查看详情
     checkDetail(val) {
       console.log(val);
-    }
+    },
+    afterSuccess() {}
   }
 };
 </script>
