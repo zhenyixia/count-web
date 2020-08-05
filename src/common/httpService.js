@@ -14,8 +14,8 @@ export default {
   getCanceToken: axios.CancelToken
 } */
 
-export const yearQuota=()=>{
-    return axios.get('boardMap/yearQuota').then(res=>res.data)
+export const getAllUser=()=>{
+    return axios.get('user/getAll').then(res=>res.data)
 }
 
 export const initData=(params)=>{
