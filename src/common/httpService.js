@@ -14,12 +14,12 @@ export default {
   getCanceToken: axios.CancelToken
 } */
 
-export const getAllUser=()=>{
-    return axios.get('user/getAll').then(res=>res.data)
+export const getAllUser = (params) => {
+  return axios.post('user/getUsers',params).then(res => res.data)
 }
 
-export const initData=(params)=>{
-    return axios.post('HisiliconList',params).then(res=>res.data)
+export const initData = (params) => {
+  return axios.post('HisiliconList', params).then(res => res.data)
 }
 
 export const spImportData = axios.defaults.baseURL + 'developPart/importDevelopPart'

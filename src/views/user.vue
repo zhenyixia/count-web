@@ -4,12 +4,13 @@
       <!-- <el-table-column type="selection" width="55"></el-table-column> -->
       <el-table-column prop="id" label="ID" align="center" min-width="100"></el-table-column>
       <el-table-column prop="name" label="昵称" align="center" min-width="100"></el-table-column>
-      <el-table-column prop="password" label="密码" align="center" min-width="100"></el-table-column>
+      <el-table-column prop="sex" label="性别" align="center" min-width="100"></el-table-column>
+      <el-table-column prop="pwd" label="密码" align="center" min-width="100"></el-table-column>
       <el-table-column prop="phone" label="手机号" align="center" min-width="120"></el-table-column>
       <el-table-column prop="role" label="角色" align="center" min-width="120"></el-table-column>
       <el-table-column prop="modifyTime" label="修改时间" align="center" min-width="120"></el-table-column>
       <!-- <el-table-column prop="enableState" label="用户状态" align="center" min-width="100"></el-table-column>
-      <el-table-column prop="tradeState" label="交易状态" align="center" min-width="100"></el-table-column> -->
+      <el-table-column prop="tradeState" label="交易状态" align="center" min-width="100"></el-table-column>-->
       <el-table-column label="操作" align="center" min-width="100">
         <template slot-scope="scope">
           <el-button type="text" @click="checkDetail(scope.row.phone)">查看详情</el-button>
@@ -44,13 +45,14 @@ export default {
   },
   //默认加载的方法
   created() {
-    this.init()
+    this.init();
   },
 
   methods: {
     init() {
-      getAllUser().then((res)=>{
-        this.tableData = res;
+      let params = {page:1,size:10};
+      getAllUser(params).then(res => {
+        this.tableData = res.data;
       });
       /* this.tableData = [
         {
