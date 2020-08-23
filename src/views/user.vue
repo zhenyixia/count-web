@@ -1,27 +1,27 @@
 <template>
   <div>
-    <el-table :data="tableData" stripe border style="width:100%" highlight-current-row>
+    <el-table :data="tableData" :stripe='true' :fit='true' border style="width:100%" highlight-current-row>
       <!-- <el-table-column type="selection" width="55"></el-table-column> -->
-      <el-table-column prop="id" label="ID" align="center" min-width="100"></el-table-column>
-      <el-table-column prop="name" label="昵称" align="center" min-width="100"></el-table-column>
-      <el-table-column prop="sex" label="性别" align="center" min-width="100"></el-table-column>
-      <el-table-column prop="pwd" label="密码" align="center" min-width="100"></el-table-column>
-      <el-table-column prop="phone" label="手机号" align="center" min-width="120"></el-table-column>
-      <el-table-column prop="role" label="角色" align="center" min-width="120"></el-table-column>
-      <el-table-column prop="modifyTime" label="修改时间" align="center" min-width="120"></el-table-column>
-      <!-- <el-table-column prop="enableState" label="用户状态" align="center" min-width="100"></el-table-column>
-      <el-table-column prop="tradeState" label="交易状态" align="center" min-width="100"></el-table-column>-->
-      <el-table-column label="操作" align="center" min-width="100">
+      <el-table-column prop="id" label="ID" align="center"></el-table-column>
+      <el-table-column prop="name" label="昵称" align="center"></el-table-column>
+      <el-table-column prop="sex" label="性别" align="center"></el-table-column>
+      <el-table-column prop="pwd" label="密码" align="center"></el-table-column>
+      <el-table-column prop="phone" label="手机号" align="center"></el-table-column>
+      <el-table-column prop="role" label="角色" align="center"></el-table-column>
+      <el-table-column prop="modifyTime" label="修改时间" align="center"></el-table-column>
+      <!-- <el-table-column prop="enableState" label="用户状态" align="center"></el-table-column>
+      <el-table-column prop="tradeState" label="交易状态" align="center"></el-table-column>-->
+      <el-table-column label="操作" min-width="150" align="center">
         <template slot-scope="scope">
-          <el-button type="text" @click="checkDetail(scope.row.phone)">查看详情</el-button>
-          <el-button type="info" @click="modifyUser(scope.row.phone)">修改</el-button>
-          <el-button type="info" @click="deleteUser(scope.row.phone)">删除</el-button>
+          <el-button type="text" @click="checkDetail(scope.row)">查看详情</el-button>
+          <el-button type="info" @click="modifyUser(scope.row)">修改</el-button>
+          <el-button type="info" @click="deleteUser(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <div>
       <el-upload
-        class="upload-demo btRight"
+        class="upload-demo"
         :action="spImportData"
         :name="name"
         :limit="1"
@@ -34,12 +34,13 @@
 </template>
 
 <script>
-import { getAllUser, spImportData } from "@/common/httpService";
+// import userViewDialog from '@/views/userView'
+import { getAllUser, spImportData } from "@/common/httpService"
 export default {
   data() {
     return {
       tableData: [],
-      name: null,
+      name: null, 
       spImportData: ""
     };
   },
