@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-let baseURL = 'http://localhost:8080'
+let baseURL = 'http://localhost:8081'
 axios.defaults.baseURL = baseURL
 /* let axiosConfig = {
   baseURL,
@@ -23,3 +23,11 @@ export const initData = (params) => {
 }
 
 export const spImportData = axios.defaults.baseURL + 'developPart/importDevelopPart'
+
+
+// 以下为跑步统计接口
+
+export const getRunList = (params) => {
+  return axios.post('run/list',params).then(res => res.data)
+}
+

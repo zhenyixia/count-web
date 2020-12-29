@@ -3,12 +3,12 @@
     <el-table :data="tableData" :stripe='true' :fit='true' border style="width:100%" highlight-current-row>
       <!-- <el-table-column type="selection" width="55"></el-table-column> -->
       <el-table-column prop="id" label="ID" align="center"></el-table-column>
-      <el-table-column prop="name" label="昵称" align="center"></el-table-column>
-      <el-table-column prop="sex" label="性别" align="center"></el-table-column>
-      <el-table-column prop="pwd" label="密码" align="center"></el-table-column>
-      <el-table-column prop="phone" label="手机号" align="center"></el-table-column>
-      <el-table-column prop="role" label="角色" align="center"></el-table-column>
-      <el-table-column prop="modifyTime" label="修改时间" align="center"></el-table-column>
+      <el-table-column prop="kilometer" label="距离" align="center"></el-table-column>
+      <el-table-column prop="address" label="地址" align="center"></el-table-column>
+      <el-table-column prop="runSecond" label="运动时长" align="center"></el-table-column>
+      <el-table-column prop="kmByHour" label="速度-km/h" align="center"></el-table-column>
+      <el-table-column prop="timeByKm" label="平均配速" align="center"></el-table-column>
+      <el-table-column prop="runDate" label="运动日期" align="center"></el-table-column>
       <!-- <el-table-column prop="enableState" label="用户状态" align="center"></el-table-column>
       <el-table-column prop="tradeState" label="交易状态" align="center"></el-table-column>-->
       <el-table-column label="操作" min-width="150" align="center">
@@ -35,7 +35,7 @@
 
 <script>
 import userViewDialog from '@/views/userView'
-import { getAllUser, spImportData } from "@/common/httpService"
+import { getRunList } from "@/common/httpService"
 export default {
   data() {
     return {
@@ -51,10 +51,12 @@ export default {
 
   methods: {
     init() {
-      let params = {page:1,size:10};
-      getAllUser(params).then(res => {
+      let params = {pageNum:1,pageSize:10};
+      getRunList(params).then(res => {
         this.tableData = res.data;
       });
+
+
       /* this.tableData = [
         {
           phone: 123,

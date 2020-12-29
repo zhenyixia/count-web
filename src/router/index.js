@@ -5,24 +5,30 @@ import home from '@/common/home'
 import test from '@/views/test'
 import user from '@/views/user'
 
+import runList from '@/views/RunList'
+
 const routerSet = {
-  routes: [
-    {
+  routes: [{
       path: '/',
-      name:'home',
+      name: 'home',
       component: home
     },
     {
-    path: '/test',
-    name:'test',
-    component: test
-  },
-  {
-  path: '/user',
-  name:'user',
-  component: user
-}
-]
+      path: '/test',
+      name: 'test',
+      component: test
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: user
+    },
+    {
+      path: '/runList',
+      name: 'runList',
+      component: runList
+    }
+  ]
 }
 
 /* let boot = window.location.origin
