@@ -21,7 +21,13 @@
     <div style="display:inline-block;float:left;margin-top:15px;">
       <el-button type="primary" icon="el-icon-plus" size="small" @click.stop="enterRunData()">录入跑步数据</el-button>
     </div>
-    <EnterRunDate v-if="showEnterRunDataDialog" ref="enterRunDate" @refreshDataList="refreshChange"></EnterRunDate>
+    <div>
+      <enter-run-date
+        v-if="showEnterRunDataDialog"
+        ref="enterRunDate"
+      
+      ></enter-run-date>
+    </div>
     <div style="display:inline-block;float:right;margin-top:15px;">
       <!-- 分页 开始 -->
       <div class="page">
@@ -44,8 +50,11 @@
 import userViewDialog from "@/views/userView";
 import addDialog from "@/views/RunAddDialog";
 import { getRunList } from "@/common/httpService";
-import enterRunDate from "./EnterRunDateDialog";
+import EnterRunDate from "./EnterRunDateDialog";
 export default {
+  components: {
+    EnterRunDate
+  },
   data() {
     return {
       tableData: [],
