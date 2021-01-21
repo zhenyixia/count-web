@@ -31,3 +31,7 @@ export const getRunList = (params) => {
   return axios.post('run/list',params).then(res => res.data)
 }
 
+export const addRunData = (params) => {
+  return axios.post('run/add',params).then(res => res.data)
+}
+

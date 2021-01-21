@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import {addRunData} from '@/common/httpService';
 export default {
   data() {
     return {
@@ -48,7 +49,7 @@ export default {
     init() {
       this.modalShow = true;
       let now = new Date();
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 2; i++) {
         let dateStr = now.toLocaleDateString().replaceAll("/", "-");
         now.setDate(now.getDate() - 1);
         this.tableData.push({
@@ -63,7 +64,11 @@ export default {
       this.modalShow = false;
       this.tableData = [];
     },
-    submit() {}
+    submit() {
+      addRunData(this.tableData).then(res=>{
+        alert(res.msg);
+      })
+    }
   }
 };
 </script>
