@@ -48,7 +48,6 @@
 
 <script>
 import userViewDialog from "@/views/userView";
-import addDialog from "@/views/RunAddDialog";
 import { getRunList } from "@/common/httpService";
 import EnterRunDate from "./EnterRunDateDialog";
 export default {
