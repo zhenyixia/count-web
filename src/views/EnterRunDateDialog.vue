@@ -37,7 +37,8 @@
 </template>
 
 <script>
-import {addRunData} from '@/common/httpService';
+import { deepCloneArray } from "@/common/util";
+import { addRunData } from "@/common/httpService";
 export default {
   data() {
     return {
@@ -65,9 +66,37 @@ export default {
       this.tableData = [];
     },
     submit() {
-      addRunData(this.tableData).then(res=>{
+      this.modalShow = false;
+      let paramData = deepCloneArray(this.tableData);
+      for (let row of this.paramData) {
+        if (!row.runSecond || !row.kilometer) {
+          return;
+        }
+        let runSecond = row.runSecond;
+        row.runSecond = this.calcActualSeconds(runSecond);
+        let kilometer = row.kilometer;
+        let secondsByKm = row.runSecond / kilometer;
+        row.timeByKm = this.calcMinSec(secondsByKm);
+        row.kmByHour = (
+          row.kilometer / Math.round(row.runSecond / 360)
+        ).toFixed(2);
+      }
+
+      addRunData(this.paramData).then(res => {
         alert(res.msg);
-      })
+        this.tableData = [];
+      });
+    },
+    calcActualSeconds(runSecond) {
+      let minute = parseInt(runSecond);
+      let second = (runSecond - minute) * 100;
+      return minute * 60 + second;
+    },
+    calcMinSec(secondsByKm) {
+      let minute = secondsByKm / 60;
+      let minuteInt = parseInt(minute);
+      let second = Math.round((minute - minuteInt) * 60);
+      return minuteInt + "分" + second + "秒";
     }
   }
 };
