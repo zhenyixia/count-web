@@ -1,21 +1,33 @@
-//使用递归的方式实现数组、对象的深拷贝
-export function deepCloneArray(obj) {
-    //判断拷贝的要进行深拷贝的是数组还是对象，是数组的话进行数组拷贝，对象的话进行对象拷贝
-    var objClone = Array.isArray(obj) ? [] : {};
-    //进行深拷贝的不能为空，并且是对象或者是
-    if (obj && typeof obj === "object") {
-      for (key in obj) {
-        if (obj.hasOwnProperty(key)) {
-          if (obj[key] && typeof obj[key] === "object") {
-            objClone[key] = deepClone1(obj[key]);
-          } else {
-            objClone[key] = obj[key];
+// 定义一个深拷贝函数  接收目标target参数
+export function deepClone(target) {
+  // 定义一个变量
+  let result;
+  // 如果当前需要深拷贝的是一个对象的话
+  if (typeof target === 'object') {
+  // 如果是一个数组的话
+      if (Array.isArray(target)) {
+          result = []; // 将result赋值为一个数组，并且执行遍历
+          for (let i in target) {
+              // 递归克隆数组中的每一项
+              result.push(deepClone(target[i]))
           }
-        }
+       // 判断如果当前的值是null的话；直接赋值为null
+      } else if(target===null) {
+          result = null;
+       // 判断如果当前的值是一个RegExp对象的话，直接赋值    
+      } else if(target.constructor===RegExp){
+          result = target;
+      }else {
+       // 否则是普通对象，直接for in循环，递归赋值对象的所有值
+          result = {};
+          for (let i in target) {
+              result[i] = deepClone(target[i]);
+          }
       }
-    }
-    return objClone;
+   // 如果不是对象的话，就是基本数据类型，那么直接赋值
+  } else {
+      result = target;
   }
-  export default{
-    deepCloneArray
-  }
+   // 返回最终结果
+  return result;
+}

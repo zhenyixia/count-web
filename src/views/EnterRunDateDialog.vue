@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { deepCloneArray } from "@/common/util";
+import { deepClone } from "@/common/util";
 import { addRunData } from "@/common/httpService";
 export default {
   data() {
@@ -51,7 +51,7 @@ export default {
       this.modalShow = true;
       let now = new Date();
       for (let i = 0; i < 2; i++) {
-        let dateStr = now.toLocaleDateString().replaceAll("/", "-");
+        let dateStr = this.processDate(now);
         now.setDate(now.getDate() - 1);
         this.tableData.push({
           runDate: dateStr,
@@ -61,35 +61,49 @@ export default {
         });
       }
     },
+    processDate(date) {
+      let dateStr = date.getFullYear() + "-";
+      let month = date.getMonth() + 1;
+      if (month < 10) {
+        month = "0" + month;
+      }
+      let day = date.getDate();
+      if (day < 10) {
+        day = "0" + day;
+      }
+      return dateStr + month + "-" + day;
+    },
     modalClose() {
       this.modalShow = false;
       this.tableData = [];
     },
     submit() {
       this.modalShow = false;
-      let paramData = deepCloneArray(this.tableData);
-      for (let row of this.paramData) {
+      let paramData = deepClone(this.tableData);
+      let lastParamData = [];
+      for (let row of paramData) {
         if (!row.runSecond || !row.kilometer) {
-          return;
+          continue;
         }
         let runSecond = row.runSecond;
         row.runSecond = this.calcActualSeconds(runSecond);
         let kilometer = row.kilometer;
-        let secondsByKm = row.runSecond / kilometer;
+        let secondsByKm = (row.runSecond / kilometer).toFixed(0);
         row.timeByKm = this.calcMinSec(secondsByKm);
-        row.kmByHour = (
-          row.kilometer / Math.round(row.runSecond / 360)
+        row.kmByHour = Math.round(
+          (row.kilometer / row.runSecond) * 3600
         ).toFixed(2);
+        lastParamData.push(row);
       }
 
-      addRunData(this.paramData).then(res => {
+      addRunData(lastParamData).then(res => {
         alert(res.msg);
         this.tableData = [];
       });
     },
     calcActualSeconds(runSecond) {
       let minute = parseInt(runSecond);
-      let second = (runSecond - minute) * 100;
+      let second = (runSecond - minute).toFixed(2) * 100;
       return minute * 60 + second;
     },
     calcMinSec(secondsByKm) {
