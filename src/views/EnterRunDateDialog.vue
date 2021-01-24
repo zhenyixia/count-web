@@ -23,7 +23,7 @@
           </el-table-column>
           <el-table-column size="small" prop="address" label="跑步地点">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.address"></el-input>
+              <el-input v-model="scope.row.address" disabled="true"> </el-input>
             </template>
           </el-table-column>
         </el-table>
@@ -50,7 +50,7 @@ export default {
     init() {
       this.modalShow = true;
       let now = new Date();
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < 7; i++) {
         let dateStr = this.processDate(now);
         now.setDate(now.getDate() - 1);
         this.tableData.push({
