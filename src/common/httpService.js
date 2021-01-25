@@ -15,23 +15,34 @@ export default {
 } */
 
 export const getAllUser = (params) => {
-  return axios.post('user/getUsers',params).then(res => res.data)
+  return axios.post('user/getUsers', params).then(res => res.data)
 }
 
 export const initData = (params) => {
   return axios.post('HisiliconList', params).then(res => res.data)
 }
 
+// get导入
 export const spImportData = axios.defaults.baseURL + 'developPart/importDevelopPart'
 
 
 // 以下为跑步统计接口
 
 export const getRunList = (params) => {
-  return axios.post('run/list',params).then(res => res.data)
+  return axios.post('run/list', params).then(res => res.data)
 }
 
 export const addRunData = (params) => {
-  return axios.post('run/add',params).then(res => res.data)
+  return axios.post('run/add', params).then(res => res.data)
 }
 
+export const importRunData = axios.defaults.baseURL + 'run/import'
+
+export const downloadRunDataTemplate = axios.defaults.baseURL + 'run/downloadTemplate';
+
+//
+export const exportRunData = (param) => {
+  return axios.post('run/export', param, {
+    responseType: 'blob'
+  }).then(res => res)
+}

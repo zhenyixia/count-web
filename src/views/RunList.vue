@@ -29,6 +29,8 @@
           size="small"
           @click.stop="enterRunData()"
         >录入跑步数据</el-button>
+        <el-button @click="exportTemplate">下载导入模板</el-button>
+        <el-button @click="exportData">导出数据</el-button>
       </div>
       <div>
         <enter-run-date v-if="showEnterRunDataDialog" ref="enterRunDate"></enter-run-date>
@@ -54,7 +56,12 @@
 
 <script>
 import userViewDialog from "@/views/userView";
-import { getRunList } from "@/common/httpService";
+import {
+  getRunList,
+  importRunData,
+  downloadRunDataTemplate,
+  exportRunData
+} from "@/common/httpService";
 import EnterRunDate from "./EnterRunDateDialog";
 import WeekCountChart from "./WeekCountChart";
 export default {
@@ -73,7 +80,8 @@ export default {
         total: 100 //总条数
       },
       //展示录入跑步数据弹出框
-      showEnterRunDataDialog: false
+      showEnterRunDataDialog: false,
+      downloadTemplate: downloadRunDataTemplate
     };
   },
   //默认加载的方法
@@ -107,6 +115,29 @@ export default {
       this.showEnterRunDataDialog = true;
       this.$nextTick(() => {
         this.$refs.enterRunDate.init();
+      });
+    },
+    // 导出模板
+    exportTemplate() {
+      window.location.href = this.downloadTemplate;
+    },
+    // 导出数据
+    exportData() {
+      exportRunData(this.queryParams).then(res => {
+        var blob = new Blob([res.data], {
+          type: "application/msword;charset=utf-8"
+        });
+        var filename = "download.xlsx";
+        var a = document.createElement("a");
+        var url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = filename;
+        var body = document.getElementsByTagName("body")[0];
+        body.appendChild(a);
+        a.click();
+        body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        this.$message.success("下载成功");
       });
     }
   }
