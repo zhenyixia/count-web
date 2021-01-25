@@ -9,7 +9,7 @@
         :stripe="true"
         :fit="true"
         :border="true"
-        :height="500"
+        :height="400"
         style="width:100%"
         highlight-current-row
       >
@@ -22,7 +22,7 @@
         <el-table-column prop="timeByKm" label="平均配速-s/km" align="center"></el-table-column>
         <el-table-column prop="runDate" label="运动日期" align="center"></el-table-column>
       </el-table>
-      <div style="display:inline-block;float:left;margin-top:15px;">
+      <div style="display:inline-block;float:left;margin-top:5px;">
         <el-button
           type="primary"
           icon="el-icon-plus"

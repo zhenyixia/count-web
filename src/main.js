@@ -8,6 +8,10 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import echarts from 'echarts'
 import world from 'echarts/map/json/world.json'
+/* 引入echarts工具 */
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title'
+import 'echarts/lib/component/legend'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)

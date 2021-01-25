@@ -6,6 +6,7 @@ import test from '@/views/test'
 import user from '@/views/user'
 
 import runList from '@/views/RunList'
+import weekCount from '@/views/WeekCountChart'
 
 const routerSet = {
   routes: [{
@@ -27,6 +28,11 @@ const routerSet = {
       path: '/runList',
       name: 'runList',
       component: runList
+    },
+    {
+      path: '/weekCount',
+      name: 'weekCount',
+      component: weekCount
     }
   ]
 }
