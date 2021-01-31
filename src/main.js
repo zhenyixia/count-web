@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
-import ElementUI from 'element-ui'
+import ElementUI, { Message } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import echarts from 'echarts'
 import world from 'echarts/map/json/world.json'
@@ -18,7 +18,6 @@ Vue.use(ElementUI)
 Vue.prototype.$echarts = echarts;
 
 echarts.registerMap('world',world);
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

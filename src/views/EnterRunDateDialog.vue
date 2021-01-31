@@ -24,11 +24,17 @@
           </el-table-column>
           <el-table-column size="small" prop="address" label="跑步地点">
             <template slot-scope="scope">
-              <el-input class="elInput" v-model="scope.row.address" disabled="true"></el-input>
+              <el-input class="elInput" v-model="scope.row.address" :disabled="true"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column fixed="right" label="操作" width="100">
+            <template slot-scope="scope">
+              <el-button @click="duplicateRow(scope.row,scope.$index)" type="text" size="small">复制一行</el-button>
             </template>
           </el-table-column>
         </el-table>
         <div style="display:inline-block;float:center;margin-top:20px;">
+          <el-button type="primary" size="small" @click="add5Row()">加5行</el-button>
           <el-button type="primary" size="small" @click="submit()">提交</el-button>
           <el-button type="primary" size="small" @click="modalClose()">取消</el-button>
         </div>
@@ -62,17 +68,45 @@ export default {
         });
       }
     },
+    add5Row() {
+      let originData = [];
+      let lastRow = this.tableData[this.tableData.length - 1];
+      let date = lastRow.runDate;
+      let startDate = new Date(date);
+
+      for (let i = 0; i < 5; i++) {
+        let newRow = deepClone(lastRow);
+        startDate.setDate(startDate.getDate() - 1);
+        newRow.runDate = startDate.toLocaleDateString();
+        newRow.kilometer = null;
+        newRow.runSecond = null;
+        this.tableData.push(newRow);
+      }
+    },
+    duplicateRow(row, index) {
+      let originData = [];
+      for (let i = 0; i < this.tableData.length; i++) {
+        originData.push(this.tableData[i]);
+        if (i == index) {
+          let newRow = deepClone(row);
+          newRow.kilometer = null;
+          newRow.runSecond = null;
+          originData.push(newRow);
+        }
+      }
+      this.tableData = originData;
+    },
     processDate(date) {
-      let dateStr = date.getFullYear() + "-";
+      let dateStr = date.getFullYear() + "/";
       let month = date.getMonth() + 1;
       if (month < 10) {
-        month = "0" + month;
+        month = month;
       }
       let day = date.getDate();
       if (day < 10) {
-        day = "0" + day;
+        day = day;
       }
-      return dateStr + month + "-" + day;
+      return dateStr + month + "/" + day;
     },
     modalClose() {
       this.modalShow = false;
@@ -97,10 +131,21 @@ export default {
         lastParamData.push(row);
       }
 
-      addRunData(lastParamData).then(res => {
-        alert(res.msg);
-        this.tableData = [];
-      });
+      addRunData(lastParamData)
+        .then(res => {
+          if (!res) {
+            this.$message.warning("提交失败");
+          }
+          if (res.status == 200 && res.message) {
+            this.$message.success(res.message);
+          } else {
+            this.$message.error(res.message);
+          }
+          this.$parent.getListFunc();
+        })
+        .catch(error => {
+          this.$message.error(error.response);
+        });
     },
     calcActualSeconds(runSecond) {
       let minute = parseInt(runSecond);
