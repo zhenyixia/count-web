@@ -38,9 +38,9 @@ export const addRunData = (params) => {
   return axios.post('run/add', params).then(res => res.data)
 }
 
-// export const importRunData = () => {
-//   return axios.get('run/import')
-// }
+export const getRunYearMonthScope = () => {
+  return axios.get('run/getYearMonthScope').then(res=>res.data)
+}
 export const importRunData = axios.defaults.baseURL + '/run/import';
 
 export const downloadRunDataTemplate = axios.defaults.baseURL + '/run/exportFile';

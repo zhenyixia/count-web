@@ -118,6 +118,7 @@ export default {
         }
       });
     },
+    
     handleSizeChange(val) {
       console.log(`页面大小: ${val}`);
       this.queryParams.pageSize = val;
