@@ -1,21 +1,21 @@
 <template>
   <div>
     <div style="float:left;">
-      <div style="position:relative;margin-bottom:0px;">
+      <div style="position:relative;float:left;margin-bottom:0px;">
         <el-button
           icon="el-icon-arrow-left"
           size="mini"
           type="primary"
-          
           @click="preMonth()"
         >前一月</el-button>
         <span style="margin-left:70px;">{{yearMonth}}</span>
-        <el-button type="primary" size="mini" style="margin-left:70px;"  @click="nextMonth()">
+        <el-button type="primary" size="mini" style="margin-left:70px;" @click="nextMonth()">
           后一月
           <i class="el-icon-arrow-right el-icon--right"></i>
         </el-button>
+        <span style="margin-left:170px;">{{totalKms}}</span>
       </div>
-      <div id="monthCountId" style="width: 1310px;height: 220px;margin-top:-5px;"></div>
+      <div id="monthCountId" style="float:left;width:1310px;height:220px;margin-top:-5px;"></div>
     </div>
   </div>
   <!-- <v-chart ref="TrendChart" :style="{width:'100%',height: '298px'}" :options="optionTrend"></v-chart> -->
@@ -29,12 +29,14 @@ export default {
   data() {
     return {
       monthChart: {},
-      optionData: { daysInMonth: [], kmInMonth: [], total: "0公里" },
+      optionData: { daysInMonth: [], kmInMonth: [] },
       queryParams: {
         year: 0,
         month: 0
       },
-      yearMonth:null,
+      totalKms: "0公里", // 本月运动总里程
+      totalTimes: 0, // 酸胀运动总次数
+      yearMonth: null
     };
   },
   methods: {
@@ -42,7 +44,30 @@ export default {
       let date = new Date();
       this.queryParams.year = date.getFullYear();
       this.queryParams.month = date.getMonth() + 1;
-      this.yearMonth = this.queryParams.year + '年'+ this.queryParams.month + '月';
+      this.yearMonth =
+        this.queryParams.year + "年" + this.queryParams.month + "月";
+      countRunByMonth(this.queryParams)
+        .then(res => {
+          if (!res || !res.data) {
+            this.$message.warning("查询不到月度数据");
+          }
+          if (res.status == 200 && res.data) {
+            this.optionData.daysInMonth = res.data.units;
+            this.optionData.kmInMonth = res.data.kmList;
+            this.totalKms = res.data.totalKms + "公里";
+          }
+        })
+        .finally(() => {
+          this.drawMonths(this.optionData);
+        });
+    },
+    preMonth() {
+      let curYearMonth = new Date(
+        this.queryParams.year + "/" + this.queryParams.month
+      );
+      curYearMonth.setMonth(curYearMonth.getMonth() - 1);
+      this.queryParams.year = curYearMonth.getFullYear();
+      this.queryParams.month = curYearMonth.getMonth() + 1;
       countRunByMonth(this.queryParams).then(res => {
         if (!res || !res.data) {
           this.$message.warning("查询不到月度数据");
@@ -50,17 +75,20 @@ export default {
         if (res.status == 200 && res.data) {
           this.optionData.daysInMonth = res.data.units;
           this.optionData.kmInMonth = res.data.kmList;
-          this.optionData.total = res.data.total + "公里";
+          this.totalKms = res.data.totalKms + "公里";
+          this.drawMonths(this.optionData);
+          this.yearMonth =
+            this.queryParams.year + "年" + this.queryParams.month + "月";
         }
-      }).finally(()=>{
-         this.drawMonths(this.optionData);
       });
     },
-    preMonth(){
-      let curYearMonth = new Date(this.queryParams.year+"/"+this.queryParams.month);
-      curYearMonth.setMonth(dd.getMonth() -1);
+    nextMonth() {
+      let curYearMonth = new Date(
+        this.queryParams.year + "/" + this.queryParams.month
+      );
+      curYearMonth.setMonth(curYearMonth.getMonth() + 1);
       this.queryParams.year = curYearMonth.getFullYear();
-      this.queryParams.month = curYearMonth.getMonth()+1;
+      this.queryParams.month = curYearMonth.getMonth() + 1;
       countRunByMonth(this.queryParams).then(res => {
         if (!res || !res.data) {
           this.$message.warning("查询不到月度数据");
@@ -68,23 +96,10 @@ export default {
         if (res.status == 200 && res.data) {
           this.optionData.daysInMonth = res.data.units;
           this.optionData.kmInMonth = res.data.kmList;
-          this.optionData.total = res.data.total + "公里";
-        }
-      });
-    },
-     nextMonth(){
-      let curYearMonth = new Date(this.queryParams.year+"/"+this.queryParams.month);
-      curYearMonth.setMonth(dd.getMonth() -1);
-      this.queryParams.year = curYearMonth.getFullYear();
-      this.queryParams.month = curYearMonth.getMonth()+1;
-      countRunByMonth(this.queryParams).then(res => {
-        if (!res || !res.data) {
-          this.$message.warning("查询不到月度数据");
-        }
-        if (res.status == 200 && res.data) {
-          this.optionData.daysInMonth = res.data.units;
-          this.optionData.kmInMonth = res.data.kmList;
-          this.optionData.total = res.data.total + "公里";
+          this.totalKms = res.data.totalKms + "公里";
+          this.yearMonth =
+            this.queryParams.year + "年" + this.queryParams.month + "月";
+          this.drawMonths(this.optionData);
         }
       });
     },
@@ -145,7 +160,7 @@ export default {
         }, // 整体统计图表格的位置，及高宽
         series: [
           {
-            name: optionData.total,
+            // name: optionData.total,
             type: "bar",
             data: optionData.kmInMonth,
             stack: "stock",
