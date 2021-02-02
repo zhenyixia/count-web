@@ -132,6 +132,7 @@ export default {
     },
     afterImport() {
       console.log("导入结束");
+      this.getListFunc();
     },
 
     //录入跑步数据
