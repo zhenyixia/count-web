@@ -38,6 +38,7 @@ export const addRunData = (params) => {
   return axios.post('run/add', params).then(res => res.data)
 }
 
+// 获取年月范围，可能不需要，待删除 -- 2021/2/2
 export const getRunYearMonthScope = () => {
   return axios.get('run/getYearMonthScope').then(res=>res.data)
 }

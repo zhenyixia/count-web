@@ -141,10 +141,13 @@ export default {
           } else {
             this.$message.error(res.message);
           }
-          this.$parent.getListFunc();
         })
         .catch(error => {
-          this.$message.error(error.response);
+          this.$message.error(error.response.data.message);
+        })
+        .finally(() => {
+          this.$parent.getListFunc();
+          this.$parent.$refs["monthChartCount"].init();
         });
     },
     calcActualSeconds(runSecond) {

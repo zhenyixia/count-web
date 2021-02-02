@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <month-chart-count></month-chart-count>
+      <month-chart-count ref="monthChartCount"></month-chart-count>
     </div>
     <div>
       <el-table
@@ -70,7 +70,6 @@ import {
   importRunData,
   downloadRunDataTemplate,
   exportRunData
-  
 } from "@/common/httpService";
 import EnterRunDate from "./EnterRunDateDialog";
 import weekChartCount from "./CountChartByWeek";
@@ -100,7 +99,7 @@ export default {
       //展示录入跑步数据弹出框
       showEnterRunDataDialog: false,
       downloadTemplate: downloadRunDataTemplate,
-      importRunData: importRunData,
+      importRunData: importRunData
     };
   },
   //默认加载的方法
@@ -110,15 +109,23 @@ export default {
 
   methods: {
     getListFunc() {
-      getRunList(this.queryParams).then(res => {
-        if (res.status == 200 && res.data) {
-          this.tableData = res.data.list;
-          this.queryParams.total = res.data.total;
-          this.$message.success("初始化成功");
-        }
-      });
+      getRunList(this.queryParams)
+        .then(res => {
+          if (!res) {
+            this.$message.error("查询数据为空");
+          }
+          if (res.status == 200 && res.data) {
+            this.tableData = res.data.list;
+            this.queryParams.total = res.data.total;
+          } else {
+            this.$message.error(res.message);
+          }
+        })
+        .catch(error => {
+          this.$message.error(error.response.data.message);
+        });
     },
-    
+
     handleSizeChange(val) {
       console.log(`页面大小: ${val}`);
       this.queryParams.pageSize = val;

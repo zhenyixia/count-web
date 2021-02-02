@@ -6,7 +6,7 @@
           icon="el-icon-arrow-left"
           size="mini"
           type="primary"
-          :disabled="curYearMonth == minYearMonth"
+          :disabled="curYearMonth<=202101"
           @click="preMonth()"
         >前一月</el-button>
         <span style="margin-left:70px;">{{curYearMonthInfo}}</span>
@@ -14,24 +14,23 @@
           type="primary"
           size="mini"
           style="margin-left:70px;"
-          :disabled="curYearMonth >= maxYearMonth"
+          :disabled="curYearMonth >= realCurYearMonth"
           @click="nextMonth()"
         >
           后一月
           <i class="el-icon-arrow-right el-icon--right"></i>
         </el-button>
-        <span style="margin-left:170px;">{{totalKms}}</span>
+        <span style="margin-left:170px;">{{totalKms}}公里</span>
         <span style="margin-left:170px;">共运动{{totalTimes}}次</span>
       </div>
       <div id="monthCountId" style="float:left;width:1310px;height:220px;margin-top:-5px;"></div>
     </div>
   </div>
-  <!-- <v-chart ref="TrendChart" :style="{width:'100%',height: '298px'}" :options="optionTrend"></v-chart> -->
 </template>
 <script>
 import echarts from "echarts";
 import { deepClone } from "@/common/util";
-import { getRunYearMonthScope, countRunByMonth } from "@/common/httpService";
+import { countRunByMonth } from "@/common/httpService";
 export default {
   name: "",
   data() {
@@ -42,32 +41,22 @@ export default {
         year: 0,
         month: 0
       },
-      totalKms: "0公里", // 本月运动总里程
-      totalTimes: 0, // 酸胀运动总次数
-      curYearMonthInfo: null, // 当前年月信息 2021年2月
-      maxYearMonth: 0, // 最大年月，如202102
-      minYearMonth: 0,
+      totalKms: 0, // 本月运动总里程
+      totalTimes: 0, // 本月总运动总次数
       curYearMonth: 0, //当前月，随着切换会变化
-      realCurYearMonth: 0 // 真空的当前月，不会承着切换变化
+      realCurYearMonth: 0, // 真正的当前月，不会随着切换变化
+      curYearMonthInfo: null // 当前年月信息，如：2021年2月
     };
   },
   methods: {
-    getYearMonthScope() {
-      getRunYearMonthScope(this.queryParams).then(res => {
-        if (res.status == 200 && res.data) {
-          this.maxYearMonth = res.data.maxYearMonth;
-          this.minYearMonth = res.data.minYearMonth;
-          this.$message.success("初始化成功");
-        }
-      });
+    init() {
+      let date = new Date();
+      this.setDateInfo(date);
+      this.realCurYearMonth = this.curYearMonth;
+
+      this.countByMonth();
     },
     countByMonth() {
-      let date = new Date();
-      this.queryParams.year = date.getFullYear();
-      this.queryParams.month = date.getMonth() + 1;
-      this.curYearMonthInfo =
-        this.queryParams.year + "年" + this.queryParams.month + "月";
-      this.curYearMonth = this.queryParams.year * 100 + this.queryParams.month;
       countRunByMonth(this.queryParams)
         .then(res => {
           if (!res || !res.data) {
@@ -77,7 +66,7 @@ export default {
             this.optionData.daysInMonth = res.data.units;
             this.optionData.kmInMonth = res.data.kmList;
             this.totalTimes = res.data.totalTimes;
-            this.totalKms = res.data.totalKms + "公里";
+            this.totalKms = res.data.totalKms;
           }
         })
         .finally(() => {
@@ -85,50 +74,25 @@ export default {
         });
     },
     preMonth() {
-      let curYearMonth = new Date(
-        this.queryParams.year + "/" + this.queryParams.month
-      );
-      curYearMonth.setMonth(curYearMonth.getMonth() - 1);
-      this.queryParams.year = curYearMonth.getFullYear();
-      this.queryParams.month = curYearMonth.getMonth() + 1;
-      this.curYearMonth = this.queryParams.year * 100 + this.queryParams.month;
-      countRunByMonth(this.queryParams).then(res => {
-        if (!res || !res.data) {
-          this.$message.warning("查询不到月度数据");
-        }
-        if (res.status == 200 && res.data) {
-          this.optionData.daysInMonth = res.data.units;
-          this.optionData.kmInMonth = res.data.kmList;
-          this.totalTimes = res.data.totalTimes;
-          this.totalKms = res.data.totalKms + "公里";
-          this.drawMonths(this.optionData);
-          this.curYearMonthInfo =
-            this.queryParams.year + "年" + this.queryParams.month + "月";
-        }
-      });
+      let curDate = new Date(this.queryParams.year, this.queryParams.month - 1);
+      curDate.setMonth(curDate.getMonth() - 1);
+      this.setDateInfo(curDate);
+      this.countByMonth();
     },
     nextMonth() {
-      let curYearMonth = new Date(
-        this.queryParams.year + "/" + this.queryParams.month
-      );
-      curYearMonth.setMonth(curYearMonth.getMonth() + 1);
-      this.queryParams.year = curYearMonth.getFullYear();
-      this.queryParams.month = curYearMonth.getMonth() + 1;
-      this.curYearMonth = this.queryParams.year * 100 + this.queryParams.month;
-      countRunByMonth(this.queryParams).then(res => {
-        if (!res || !res.data) {
-          this.$message.warning("查询不到月度数据");
-        }
-        if (res.status == 200 && res.data) {
-          this.optionData.daysInMonth = res.data.units;
-          this.optionData.kmInMonth = res.data.kmList;
-          this.totalTimes = res.data.totalTimes;
-          this.totalKms = res.data.totalKms + "公里";
-          this.curYearMonthInfo =
-            this.queryParams.year + "年" + this.queryParams.month + "月";
-          this.drawMonths(this.optionData);
-        }
-      });
+      let curDate = new Date(this.queryParams.year, this.queryParams.month - 1);
+      curDate.setMonth(curDate.getMonth() + 1);
+      this.setDateInfo(curDate);
+      this.countByMonth();
+    },
+    setDateInfo(date) {
+      let curYear = date.getFullYear();
+      let curMonth = date.getMonth() + 1;
+
+      this.queryParams.year = curYear;
+      this.queryParams.month = curMonth;
+      this.curYearMonth = curYear * 100 + curMonth;
+      this.curYearMonthInfo = curYear + "年" + curMonth + "月";
     },
     drawMonths(optionData) {
       this.monthChart = this.$echarts.init(
@@ -177,6 +141,7 @@ export default {
             interval: 3
           }
         },
+        // 整体统计图表格的位置，及高宽
         grid: {
           left: 30,
           right: 100,
@@ -184,7 +149,7 @@ export default {
           top: 60,
           height: 110,
           width: 1150
-        }, // 整体统计图表格的位置，及高宽
+        },
         series: [
           {
             // name: optionData.total,
@@ -219,13 +184,9 @@ export default {
         chart.resize();
       });
     }
-    //调用
   },
   mounted() {
-    this.getYearMonthScope();
-    this.countByMonth();
-    let date = new Date();
-    this.realCurYearMonth = date.getFullYear() * 100 + date.getMonth() + 1;
+    this.init();
   }
 };
 </script>
