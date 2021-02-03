@@ -32,9 +32,9 @@
           <span style="margin-left:100px;">共{{totalKms}}公里</span>
           <span style="margin-left:100px;">共运动{{totalTimes}}次</span>
         </div>
-        <div id="yearCountId" style="width:500px;height:300px;"></div>
+        <div id="yearCountId" style="width:650px;height:300px;"></div>
         <div style="margin-top:20px;">
-          <el-button type="primary" size="small" @click="modalClose()">退出</el-button>
+          <el-button type="primary" @click="modalClose()">退出</el-button>
         </div>
       </div>
     </el-dialog>
@@ -149,7 +149,7 @@ export default {
         },
         // 整体统计图表格的位置，及高宽
         grid: {
-          // left: 0,
+          left: 25,
           // right: 0,
         //   bottom: 30,
         //   top: 60,
