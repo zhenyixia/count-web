@@ -36,6 +36,9 @@ export const countRunInOneMonth = (params) => {
 export const countRunInOneYear = (params) => {
   return axios.post('run/countInOneYear', params).then(res => res.data)
 }
+export const countRunAllYears = () => {
+  return axios.get('run/countAllYears').then(res => res.data)
+}
 
 export const addRunData = (params) => {
   return axios.post('run/add', params).then(res => res.data)
