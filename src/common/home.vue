@@ -4,9 +4,9 @@
     <router-link to="/runList">
       <button>跑步列表</button>
     </router-link>
-    <router-link to="/weekCount">
+    <!-- <router-link to="/weekCount">
       <button>按周统计</button>
-    </router-link>
+    </router-link> -->
   </div>
 </template>
 
