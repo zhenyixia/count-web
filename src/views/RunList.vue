@@ -25,8 +25,8 @@
         <el-table-column prop="runDate" label="运动日期" align="center"></el-table-column>
       </el-table>
       <div style="display:inline-block;float:left;margin-top:15px;">
-        <el-button type="primary" icon="el-icon-plus" size="small" @click.stop="enterRunData()">录入数据</el-button>
-        <el-button icon="el-icon-download" type="primary" size="small" @click="exportTemplate">录入模板</el-button>
+        <el-button icon="el-icon-plus" type="primary"  size="small" @click.stop="enterRunData()">录入数据</el-button>
+        <el-button icon="el-icon-download" type="primary" size="small" style="margin-left:0px;" @click="exportTemplate">录入模板</el-button>
         <el-upload
           style="display:inline-block"
           class="upload-demo"
@@ -35,11 +35,11 @@
           :limit="1"
           :on-success="afterImport"
         >
-          <el-button icon="el-icon-upload2" type="primary" size="small">批量录入</el-button>
+          <el-button icon="el-icon-upload2" type="primary" size="small">批量导入</el-button>
         </el-upload>
 
         <el-button icon="el-icon-s-data" type="primary" size="small" @click="countInYear()">按年统计</el-button>
-        <el-button icon="el-icon-s-data" type="primary" size="small" @click="countAllYears()">统计所有</el-button>
+        <el-button icon="el-icon-s-data" type="primary" size="small" style="margin-left:0px;" @click="countAllYears()">统计所有</el-button>
       </div>
       <div>
         <enter-run-date v-if="showEnterRunDataDialog" ref="enterRunDate"></enter-run-date>

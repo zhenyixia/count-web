@@ -10,28 +10,6 @@
       class="elDialogBody"
     >
       <div>
-        <div style="position:relative;margin-top:0px;">
-          <!-- <el-button
-            icon="el-icon-arrow-left"
-            size="mini"
-            type="primary"
-            :disabled="curYear<=2021"
-            @click="preYear()"
-          >前一年</el-button>
-          <span style="margin-left:40px;">{{curYear}}年</span>
-          <el-button
-            type="primary"
-            size="mini"
-            style="margin-left:40px;"
-            :disabled="curYear >= realCurYear"
-            @click="nextYear()"
-          >
-            后一年
-            <i class="el-icon-arrow-right el-icon--right"></i>
-          </el-button> -->
-          <span style="margin-left:100px;">共{{totalKms}}公里</span>
-          <span style="margin-left:100px;">共运动{{totalTimes}}次</span>
-        </div>
         <div id="allYearsCountId" style="width:650px;height:300px;"></div>
         <div style="margin-top:20px;">
           <el-button type="primary" @click="modalClose()">退出</el-button>
@@ -50,9 +28,7 @@ export default {
     return {
       modalShow: false,
       yearChart: {},
-      optionData: { daysInMonth: [], kmInMonth: [] },
-      totalKms: 0, // 本年运动总里程
-      totalTimes: 0, // 本年总运动总次数
+      optionData: { daysInMonth: [], kmInMonth: [],optionData:0 },
     };
   },
   methods: {
@@ -70,8 +46,7 @@ export default {
           if (res.status == 200 && res.data) {
             this.optionData.daysInMonth = res.data.units;
             this.optionData.kmInMonth = res.data.kmList;
-            this.totalTimes = res.data.totalTimes;
-            this.totalKms = res.data.totalKms;
+            this.optionData.totalKms = res.data.totalKms;
           }
         })
         .finally(() => {
@@ -85,25 +60,11 @@ export default {
       );
       let optionTrend = {
         color: "#c23531",
-        // title: {
-        //   text: optionData.total,
-        //   textStyle: { color: "#8043D7" }
-        // },
         tooltip: {
           trigger: "axis",
           axisPointer: {
             // type: "shadow"
           }
-          // formatter: param => {
-          //   let data = `${param[0].name}`;
-          //   for (let i in param) {
-          //     data += `<br>${param[i].marker}${param[i].seriesName}:${param[i].value}`;
-          //     if (param[i].seriesIndex == 2) {
-          //       data += "%";
-          //     }
-          //   }
-          //   return data;
-          // }
         },
         legend: {
           // data: ["按周统计"],
@@ -137,7 +98,7 @@ export default {
         },
         series: [
           {
-            // name: optionData.total,
+            name: "总计 " +optionData.totalKms + " 公里",
             type: "bar",
             data: optionData.kmInMonth,
             stack: "stock",
