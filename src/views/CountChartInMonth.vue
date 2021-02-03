@@ -30,7 +30,7 @@
 <script>
 import echarts from "echarts";
 import { deepClone } from "@/common/util";
-import { countRunByMonth } from "@/common/httpService";
+import { countRunInOneMonth } from "@/common/httpService";
 export default {
   name: "",
   data() {
@@ -57,7 +57,7 @@ export default {
       this.countByMonth();
     },
     countByMonth() {
-      countRunByMonth(this.queryParams)
+      countRunInOneMonth(this.queryParams)
         .then(res => {
           if (!res || !res.data) {
             this.$message.warning("查询不到月度数据");

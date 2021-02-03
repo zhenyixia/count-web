@@ -38,11 +38,12 @@
           <el-button icon="el-icon-upload2" type="primary" size="small">批量录入</el-button>
         </el-upload>
 
-        <el-button icon="el-icon-s-data" type="primary" size="small" @click="exportData">按年统计</el-button>
+        <el-button icon="el-icon-s-data" type="primary" size="small" @click="countInYear()">按年统计</el-button>
         <el-button icon="el-icon-s-data" type="primary" size="small" @click="exportData">统计所有</el-button>
       </div>
       <div>
         <enter-run-date v-if="showEnterRunDataDialog" ref="enterRunDate"></enter-run-date>
+         <year-chart-count  v-if="showYearCountDialog" ref="yearChartCount"></year-chart-count>
       </div>
       <div style="display:inline-block;float:right;margin-top:15px;">
         <!-- 分页 开始 -->
@@ -73,8 +74,8 @@ import {
 } from "@/common/httpService";
 import EnterRunDate from "./EnterRunDateDialog";
 import weekChartCount from "./CountChartByWeek";
-import monthChartCount from "./CountChartByMonth";
-import yearChartCount from "./CountChartByYear";
+import monthChartCount from "./CountChartInMonth";
+import yearChartCount from "./CountChartInYear";
 import allYearChartCount from "./CountChartByAllYear";
 export default {
   components: {
@@ -98,6 +99,7 @@ export default {
       },
       //展示录入跑步数据弹出框
       showEnterRunDataDialog: false,
+      showYearCountDialog: false,
       downloadTemplate: downloadRunDataTemplate,
       importRunData: importRunData
     };
@@ -147,6 +149,12 @@ export default {
       this.showEnterRunDataDialog = true;
       this.$nextTick(() => {
         this.$refs.enterRunDate.init();
+      });
+    },
+    countInYear() {
+      this.showYearCountDialog = true;
+      this.$nextTick(() => {
+        this.$refs.yearChartCount.init();
       });
     },
     // 导出模板

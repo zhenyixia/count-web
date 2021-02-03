@@ -30,8 +30,11 @@ export const getRunList = (params) => {
   return axios.post('run/list', params).then(res => res.data)
 }
 
-export const countRunByMonth = (params) => {
-  return axios.post('run/countByMonth', params).then(res => res.data)
+export const countRunInOneMonth = (params) => {
+  return axios.post('run/countInOneMonth', params).then(res => res.data)
+}
+export const countRunInOneYear = (params) => {
+  return axios.post('run/countInOneYear', params).then(res => res.data)
 }
 
 export const addRunData = (params) => {
