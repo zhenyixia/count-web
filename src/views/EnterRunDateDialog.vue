@@ -57,7 +57,7 @@ export default {
     init() {
       this.modalShow = true;
       let now = new Date();
-      for (let i = 0; i < 7; i++) {
+      for (let i = 0; i < 3; i++) {
         let dateStr = this.processDate(now);
         now.setDate(now.getDate() - 1);
         this.tableData.push({
