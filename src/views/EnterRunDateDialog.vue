@@ -34,28 +34,55 @@
           </el-table-column>
         </el-table>
         <div style="display:inline-block;float:center;margin-top:20px;">
-          <el-button type="primary" size="small" @click="add5Row()">加5行</el-button>
           <el-button type="primary" size="small" @click="submit()">提交</el-button>
           <el-button type="primary" size="small" @click="modalClose()">取消</el-button>
+          <el-button type="primary" size="small" @click="add5Row()">加5行</el-button>
+          <el-button type="primary" size="small" @click="modifyAddress()">修改跑点</el-button>
         </div>
       </div>
+    </el-dialog>
+    <el-dialog title="跑步地址" width="30%" :visible.sync="showModifyAddressDialog">
+      <el-select
+        v-model="runAddress"
+        filterable
+        allow-create
+        default-first-option
+        placeholder="请选择或输入一个新的"
+      >
+        <el-option
+          v-for="item in runAddressOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showModifyAddressDialog = false">取 消</el-button>
+        <el-button type="primary" @click="confirmModifyAddress">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import { deepClone } from "@/common/util";
-import { addRunData } from "@/common/httpService";
+import { addRunData, getRunAddressed } from "@/common/httpService";
 export default {
   data() {
     return {
       modalShow: false,
-      tableData: []
+      tableData: [],
+      runAddressOptions: [],
+      showModifyAddressDialog: false,
+      runAddress: "西安市高新区东滩社区"
     };
   },
   methods: {
     init() {
       this.modalShow = true;
+      if (this.tableData.length != 0) {
+        return;
+      }
       let now = new Date();
       for (let i = 0; i < 3; i++) {
         let dateStr = this.processDate(now);
@@ -64,9 +91,34 @@ export default {
           runDate: dateStr,
           kilometer: null,
           runSecond: null,
-          address: "东滩社区"
+          address: this.runAddress
         });
       }
+    },
+    modifyAddress() {
+      this.showModifyAddressDialog = true;
+      getRunAddressed()
+        .then(res => {
+          if (!res) {
+            this.$message.error("查询数据为空");
+          }
+          if (res.status == 200 && res.data) {
+            for (var address of res.data) {
+              this.runAddressOptions.push({ value: address, label: address });
+            }
+          } else {
+            this.$message.error(res.message);
+          }
+        })
+        .catch(error => {
+          this.$message.error(error.response.data.message);
+        });
+    },
+    confirmModifyAddress() {
+      for (let item of this.tableData) {
+        item.address = this.runAddress;
+      }
+       this.showModifyAddressDialog = false;
     },
     add5Row() {
       let originData = [];

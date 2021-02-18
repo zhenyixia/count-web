@@ -39,6 +39,10 @@ export const countRunInOneYear = (params) => {
 export const countRunAllYears = () => {
   return axios.get('run/countAllYears').then(res => res.data)
 }
+// 获取已有的跑步地址
+export const getRunAddressed = () => {
+  return axios.get('run/getExistedAddress').then(res => res.data)
+}
 
 export const addRunData = (params) => {
   return axios.post('run/add', params).then(res => res.data)
