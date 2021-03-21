@@ -1,102 +1,108 @@
 <template>
   <div>
-    <div style="float:left;">
-      <div style="position:relative;float:left;margin-bottom:0px;">
-        <el-button
-          icon="el-icon-arrow-left"
-          size="mini"
-          type="primary"
-          :disabled="curYearMonth<=202101"
-          @click="preMonth()"
-        >前一月</el-button>
-        <span style="margin-left:70px;">{{curYearMonthInfo}}</span>
-        <el-button
-          type="primary"
-          size="mini"
-          style="margin-left:70px;"
-          :disabled="curYearMonth >= realCurYearMonth"
-          @click="nextMonth()"
-        >
-          后一月
-          <i class="el-icon-arrow-right el-icon--right"></i>
-        </el-button>
-        <span style="margin-left:170px;">{{totalKms}}公里</span>
-        <span style="margin-left:170px;">共运动{{totalTimes}}次</span>
+    <el-dialog
+      title="统计一年"
+      :visible.sync="modalShow"
+      top="1%"
+      width="700px"
+      height="500px"
+      :before-close="modalClose"
+      class="elDialogBody"
+    >
+      <div>
+        <div style="position:relative;margin-bottom:0px;">
+          <el-button
+            icon="el-icon-arrow-left"
+            size="mini"
+            type="primary"
+            :disabled="curYear<=2021"
+            @click="preYear()"
+          >前一年</el-button>
+          <span style="margin-left:40px;">{{curYear}}年</span>
+          <el-button
+            type="primary"
+            size="mini"
+            style="margin-left:40px;"
+            :disabled="curYear >= realCurYear"
+            @click="nextYear()"
+          >
+            后一年
+            <i class="el-icon-arrow-right el-icon--right"></i>
+          </el-button>
+          <span style="margin-left:100px;">共{{total}}小时</span>
+          <span style="margin-left:100px;">共运动{{totalTimes}}次</span>
+        </div>
+        <div id="yearCountId" style="width:650px;height:300px;"></div>
+        <div style="margin-top:20px;">
+          <el-button type="primary" @click="modalClose()">退出</el-button>
+        </div>
       </div>
-      <div id="monthCountId" style="float:left;width:1310px;height:220px;margin-top:-5px;"></div>
-    </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import echarts from "echarts";
 import { deepClone } from "@/common/util";
-import { countRunInOneMonth } from "@/common/httpService";
+import { countLearnInOneYear } from "@/common/httpService";
 export default {
   name: "",
   data() {
     return {
-      monthChart: {},
-      optionData: { daysInMonth: [], kmInMonth: [] },
+      modalShow: false,
+      yearChart: {},
+      optionData: { daysInMonth: [], valueList: [] },
       queryParams: {
         year: 0,
         month: 0
       },
-      totalKms: 0, // 本月运动总里程
-      totalTimes: 0, // 本月总运动总次数
-      curYearMonth: 0, //当前月，随着切换会变化
-      realCurYearMonth: 0, // 真正的当前月，不会随着切换变化
-      curYearMonthInfo: null // 当前年月信息，如：2021年2月
+      total: 0, // 本年运动总里程
+      totalTimes: 0, // 本年总运动总次数
+      curYear: 0, //当前年，随着切换会变化
+      realCurYear: 0 // 真正的当前年，不会随着切换变化
     };
   },
   methods: {
     init() {
+      this.modalShow = true;
       let date = new Date();
-      this.setDateInfo(date);
-      this.realCurYearMonth = this.curYearMonth;
+      this.realCurYear = this.curYear = date.getFullYear();
+      this.queryParams.year = this.curYear;
 
-      this.countByMonth();
+      this.countInYear();
     },
-    countByMonth() {
-      countRunInOneMonth(this.queryParams)
+    modalClose() {
+      this.modalShow = false;
+      this.optionData = [];
+    },
+    countInYear() {
+      countLearnInOneYear(this.queryParams)
         .then(res => {
           if (!res || !res.data) {
-            this.$message.warning("查询不到月度数据");
+            this.$message.warning("查询不到年度数据");
           }
           if (res.status == 200 && res.data) {
             this.optionData.daysInMonth = res.data.units;
-            this.optionData.kmInMonth = res.data.kmList;
+            this.optionData.valueList = res.data.valueList;
             this.totalTimes = res.data.totalTimes;
-            this.totalKms = res.data.totalKms;
+            this.total = res.data.total;
           }
         })
         .finally(() => {
           this.drawMonths(this.optionData);
         });
     },
-    preMonth() {
-      let curDate = new Date(this.queryParams.year, this.queryParams.month - 1);
-      curDate.setMonth(curDate.getMonth() - 1);
-      this.setDateInfo(curDate);
-      this.countByMonth();
+    preYear() {
+      this.queryParams.year = this.curYear = this.queryParams.year - 1;
+      this.countInYear();
     },
-    nextMonth() {
-      let curDate = new Date(this.queryParams.year, this.queryParams.month - 1);
-      curDate.setMonth(curDate.getMonth() + 1);
-      this.setDateInfo(curDate);
-      this.countByMonth();
+    nextYear() {
+      this.queryParams.year = this.curYear = this.queryParams.year + 1;
+      this.countInYear();
     },
-    setDateInfo(date) {
-      let curYear = date.getFullYear();
-      let curMonth = date.getMonth() + 1;
 
-      this.queryParams.year = curYear;
-      this.queryParams.month = curMonth;
-      this.curYearMonth = curYear * 100 + curMonth;
-      this.curYearMonthInfo = curYear + "年" + curMonth + "月";
-    },
     drawMonths(optionData) {
-      this.monthChart = this.$echarts.init(
-        document.getElementById("monthCountId")
+      this.yearChart = this.$echarts.init(
+        document.getElementById("yearCountId")
       );
       let optionTrend = {
         color: "#c23531",
@@ -143,18 +149,18 @@ export default {
         },
         // 整体统计图表格的位置，及高宽
         grid: {
-          left: 30,
-          right: 100,
-          bottom: 30,
-          top: 60,
-          height: 110,
-          width: 1150
-        },
+          left: 25,
+          // right: 0,
+        //   bottom: 30,
+        //   top: 60,
+          height: 210,
+          width: 600
+          },
         series: [
           {
             // name: optionData.total,
             type: "bar",
-            data: optionData.kmInMonth,
+            data: optionData.valueList,
             stack: "stock",
             barMaxWidth: 20,
             label: {
@@ -177,7 +183,7 @@ export default {
           }
         ]
       };
-      this.monthChart.setOption(optionTrend);
+      this.yearChart.setOption(optionTrend);
     },
     resize(chart) {
       window.addEventListener("resize", function() {

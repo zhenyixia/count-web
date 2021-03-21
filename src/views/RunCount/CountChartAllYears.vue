@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog
-      title="统计一年"
+      title="统计所有年"
       :visible.sync="modalShow"
       top="1%"
       width="700px"
@@ -10,29 +10,7 @@
       class="elDialogBody"
     >
       <div>
-        <div style="position:relative;margin-bottom:0px;">
-          <el-button
-            icon="el-icon-arrow-left"
-            size="mini"
-            type="primary"
-            :disabled="curYear<=2021"
-            @click="preYear()"
-          >前一年</el-button>
-          <span style="margin-left:40px;">{{curYear}}年</span>
-          <el-button
-            type="primary"
-            size="mini"
-            style="margin-left:40px;"
-            :disabled="curYear >= realCurYear"
-            @click="nextYear()"
-          >
-            后一年
-            <i class="el-icon-arrow-right el-icon--right"></i>
-          </el-button>
-          <span style="margin-left:100px;">共{{totalKms}}公里</span>
-          <span style="margin-left:100px;">共运动{{totalTimes}}次</span>
-        </div>
-        <div id="yearCountId" style="width:650px;height:300px;"></div>
+        <div id="allYearsCountId" style="width:650px;height:300px;"></div>
         <div style="margin-top:20px;">
           <el-button type="primary" @click="modalClose()">退出</el-button>
         </div>
@@ -43,88 +21,50 @@
 <script>
 import echarts from "echarts";
 import { deepClone } from "@/common/util";
-import { countRunInOneYear } from "@/common/httpService";
+import { countRunAllYears } from "@/common/httpService";
 export default {
   name: "",
   data() {
     return {
       modalShow: false,
       yearChart: {},
-      optionData: { daysInMonth: [], kmInMonth: [] },
-      queryParams: {
-        year: 0,
-        month: 0
-      },
-      totalKms: 0, // 本年运动总里程
-      totalTimes: 0, // 本年总运动总次数
-      curYear: 0, //当前年，随着切换会变化
-      realCurYear: 0 // 真正的当前年，不会随着切换变化
+      optionData: { daysInMonth: [], kmInMonth: [],optionData:0 },
     };
   },
   methods: {
-    init() {
-      this.modalShow = true;
-      let date = new Date();
-      this.realCurYear = this.curYear = date.getFullYear();
-      this.queryParams.year = this.curYear;
-
-      this.countInYear();
-    },
     modalClose() {
       this.modalShow = false;
       this.optionData = [];
     },
-    countInYear() {
-      countRunInOneYear(this.queryParams)
+    init() {
+      this.modalShow = true;
+      countRunAllYears()
         .then(res => {
           if (!res || !res.data) {
             this.$message.warning("查询不到年度数据");
           }
           if (res.status == 200 && res.data) {
             this.optionData.daysInMonth = res.data.units;
-            this.optionData.kmInMonth = res.data.kmList;
-            this.totalTimes = res.data.totalTimes;
-            this.totalKms = res.data.totalKms;
+            this.optionData.kmInMonth = res.data.valueList;
+            this.optionData.total = res.data.total;
           }
         })
         .finally(() => {
           this.drawMonths(this.optionData);
         });
     },
-    preYear() {
-      this.queryParams.year = this.curYear = this.queryParams.year - 1;
-      this.countInYear();
-    },
-    nextYear() {
-      this.queryParams.year = this.curYear = this.queryParams.year + 1;
-      this.countInYear();
-    },
 
     drawMonths(optionData) {
       this.yearChart = this.$echarts.init(
-        document.getElementById("yearCountId")
+        document.getElementById("allYearsCountId")
       );
       let optionTrend = {
         color: "#c23531",
-        // title: {
-        //   text: optionData.total,
-        //   textStyle: { color: "#8043D7" }
-        // },
         tooltip: {
           trigger: "axis",
           axisPointer: {
             // type: "shadow"
           }
-          // formatter: param => {
-          //   let data = `${param[0].name}`;
-          //   for (let i in param) {
-          //     data += `<br>${param[i].marker}${param[i].seriesName}:${param[i].value}`;
-          //     if (param[i].seriesIndex == 2) {
-          //       data += "%";
-          //     }
-          //   }
-          //   return data;
-          // }
         },
         legend: {
           // data: ["按周统计"],
@@ -149,16 +89,16 @@ export default {
         },
         // 整体统计图表格的位置，及高宽
         grid: {
-          left: 25,
+          left: 36,
           // right: 0,
-        //   bottom: 30,
-        //   top: 60,
+          //   bottom: 30,
+          //   top: 60,
           height: 210,
           width: 600
-          },
+        },
         series: [
           {
-            // name: optionData.total,
+            name: "总计 " +optionData.total + " 公里",
             type: "bar",
             data: optionData.kmInMonth,
             stack: "stock",

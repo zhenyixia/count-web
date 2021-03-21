@@ -73,10 +73,10 @@ import {
   downloadRunDataTemplate,
   exportRunData
 } from "@/common/httpService";
-import EnterRunDate from "./EnterRunDateDialog";
-import monthChartCount from "./CountChartInMonth";
-import yearChartCount from "./CountChartInYear";
-import allYearChartCount from "./CountChartAllYears";
+import EnterRunDate from "./../RunCount/EnterDateDialog";
+import monthChartCount from "./../RunCount/CountChartInMonth";
+import yearChartCount from "./../RunCount/CountChartInYear";
+import allYearChartCount from "./../RunCount/CountChartAllYears";
 export default {
   components: {
     EnterRunDate: EnterRunDate,

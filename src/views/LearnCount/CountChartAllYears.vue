@@ -21,7 +21,7 @@
 <script>
 import echarts from "echarts";
 import { deepClone } from "@/common/util";
-import { countRunAllYears } from "@/common/httpService";
+import { countLearnAllYears } from "@/common/httpService";
 export default {
   name: "",
   data() {
@@ -38,15 +38,15 @@ export default {
     },
     init() {
       this.modalShow = true;
-      countRunAllYears()
+      countLearnAllYears()
         .then(res => {
           if (!res || !res.data) {
             this.$message.warning("查询不到年度数据");
           }
           if (res.status == 200 && res.data) {
             this.optionData.daysInMonth = res.data.units;
-            this.optionData.kmInMonth = res.data.kmList;
-            this.optionData.totalKms = res.data.totalKms;
+            this.optionData.kmInMonth = res.data.valueList;
+            this.optionData.total = res.data.total;
           }
         })
         .finally(() => {
@@ -98,7 +98,7 @@ export default {
         },
         series: [
           {
-            name: "总计 " +optionData.totalKms + " 公里",
+            name: "总计 " +optionData.total + " 小时",
             type: "bar",
             data: optionData.kmInMonth,
             stack: "stock",

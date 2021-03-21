@@ -5,7 +5,8 @@ import home from '@/common/home'
 import test from '@/views/test'
 import user from '@/views/user'
 
-import runList from '@/views/RunList'
+import runList from '@/views/OldPages/RunList'
+import countHome from '@/views/CountHome'
 import weekCount from '@/views/WeekCountChart'
 
 const routerSet = {
@@ -28,6 +29,11 @@ const routerSet = {
       path: '/runList',
       name: 'runList',
       component: runList
+    },
+    {
+      path: '/countHome',
+      name: 'countHome',
+      component: countHome
     },
     {
       path: '/weekCount',

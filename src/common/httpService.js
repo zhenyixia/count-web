@@ -20,9 +20,7 @@ export const getAllUser = (params) => {
   return axios.post('user/getUsers', params).then(res => res.data)
 }
 
-export const initData = (params) => {
-  return axios.post('HisiliconList', params).then(res => res.data)
-}
+
 
 // 以下为跑步统计接口
 
@@ -56,9 +54,32 @@ export const importRunData = axios.defaults.baseURL + '/run/import';
 
 export const downloadRunDataTemplate = axios.defaults.baseURL + '/run/exportFile';
 
-//
+// 未完成，待后台开发
 export const exportRunData = (param) => {
   return axios.post('run/export', param, {
     responseType: 'blob'
   }).then(res => res)
+}
+
+// 以下为学习统计相关接口
+export const getLearnList = (params) => {
+  return axios.post('learn/list', params).then(res => res.data)
+}
+
+export const countLearnInOneMonth = (params) => {
+  return axios.post('learn/countInOneMonth', params).then(res => res.data)
+}
+export const countLearnInOneYear = (params) => {
+  return axios.post('learn/countInOneYear', params).then(res => res.data)
+}
+export const countLearnAllYears = () => {
+  return axios.get('learn/countAllYears').then(res => res.data)
+}
+// 获取已有的跑步地址
+export const getLearnContent = () => {
+  return axios.get('learn/getExistedContent').then(res => res.data)
+}
+
+export const addLearnData = (params) => {
+  return axios.post('learn/add', params).then(res => res.data)
 }

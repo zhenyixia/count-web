@@ -198,8 +198,8 @@ export default {
           this.$message.error(error.response.data.message);
         })
         .finally(() => {
-          this.$parent.getListFunc();
-          this.$parent.$refs["monthChartCount"].init();
+          // this.$parent.getListFunc();
+          this.$parent.$refs["runMonthCount"].init();
         });
     },
     calcActualSeconds(runSecond) {
