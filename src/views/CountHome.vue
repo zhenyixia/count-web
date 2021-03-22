@@ -12,15 +12,17 @@
       <span style="float: left; display: inline-block; margin-left: 300px"
         >跑步统计</span
       >
-      <span style="float: left; display: inline-block; margin-left: 550px">{{ this.learnContent }} 学习统计</span>
-        <el-button
-          icon="el-icon-open"
-          size="mini"
-          type="primary"
-          style="float: left; display: inline-block; margin-left: 50px"
-          @click="changeLearnCount()"
-          >切换全部</el-button
-        >
+      <span style="float: left; display: inline-block; margin-left: 550px"
+        >{{ this.learnContent }} 学习统计</span
+      >
+      <el-button
+        icon="el-icon-open"
+        size="mini"
+        type="primary"
+        style="float: left; display: inline-block; margin-left: 50px"
+        @click="changeLearnCount()"
+        >{{ changeAllOrLatest }}</el-button
+      >
     </div>
     <div
       style="
@@ -267,6 +269,7 @@ export default {
       learnContentOptions: [],
       learnContent: "init",
       latestLearnContent: "",
+      changeAllOrLatest: "切换全部",
     };
   },
   //默认加载的方法
@@ -293,8 +296,15 @@ export default {
         });
     },
 
+    // 全部与最近的切换
     changeLearnCount() {
-      this.learnContent = "";
+      if (this.changeAllOrLatest == "切换全部") {
+        this.changeAllOrLatest = "切换最近";
+        this.learnContent = "";
+      }else{
+        this.changeAllOrLatest = "切换全部";
+        this.learnContent = this.latestLearnContent;
+      }
       this.$nextTick(() => {
         this.$refs.learnWeekCountRef.init();
       });

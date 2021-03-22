@@ -22,7 +22,7 @@
           下一周
           <i class="el-icon-arrow-right el-icon--right"></i>
         </el-button>
-        <span style="margin-left: 165px">共运动{{ totalTimes }}次</span>
+        <span style="margin-left: 125px">共运动{{ totalTimes }}次</span>
         <span style="margin-left: 50px">{{ total }}公里</span>
       </div>
       <div

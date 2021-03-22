@@ -22,7 +22,7 @@
           后一月
           <i class="el-icon-arrow-right el-icon--right"></i>
         </el-button>
-        <span style="margin-left:195px;">共运动{{totalTimes}}次</span>
+        <span style="margin-left:145px;">共运动{{totalTimes}}次</span>
         <span style="margin-left:50px;">{{total}}公里</span>
       </div>
       <div id="monthCountId" style="float:left;width:100%;height:100%;margin-top:-5px;"></div>
