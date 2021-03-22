@@ -1,41 +1,33 @@
 <template>
   <div>
-    <div style="float: right; width: 660px; height: 250px; margin-right: 13px">
-      <div style="float: left;margin-bottom:0px;">
-        <!-- <div style="position:relative;float:left;margin-bottom:0px;"> -->
-        <!-- <span style="margin-left:10px;">学习统计</span> -->
+    <div style="float: right; width: 670px; height: 350px;margin-right: 13px">
+      <div style="position: relative; float: left; margin-bottom: 0px">
         <el-button
           icon="el-icon-arrow-left"
           size="mini"
           type="primary"
-          style="margin-left: 0px;"
-          :disabled="curYearMonth <= 202103"
-          @click="preMonth()"
-          >前一月</el-button
+          style="margin-left: 5px"
+          :disabled="weekIndex <= -10"
+          @click="preWeek()"
+          >上一周</el-button
         >
-        <span style="margin-left: 20px;">{{ curYearMonthInfo }}</span>
+        <span style="margin-left: 20px">{{ weekDayScopeInfo }}</span>
         <el-button
           type="primary"
           size="mini"
-          style="margin-left: 20px;"
-          :disabled="curYearMonth >= realCurYearMonth"
-          @click="nextMonth()"
+          style="margin-left: 20px"
+          :disabled="weekIndex >= 0"
+          @click="nextWeek()"
         >
-          后一月
+          下一周
           <i class="el-icon-arrow-right el-icon--right"></i>
         </el-button>
-        <span style="margin-left: 150px">共学习{{ totalTimes }}次</span>
+        <span style="margin-left: 125px">共学习{{ totalTimes }}次</span>
         <span style="margin-left: 50px">{{ total }}小时</span>
       </div>
       <div
-        id="learnMonthCountId"
-        style="
-          float: right;
-          width: 100%;
-          height: 100%;
-          margin-top: -5px;
-          margin-right: 15px;
-        "
+        id="learnWeekCountId"
+        style="float: left; width: 100%; height: 100%; margin-top: -5px"
       ></div>
     </div>
   </div>
@@ -43,41 +35,43 @@
 <script>
 import echarts from "echarts";
 import { deepClone } from "@/common/util";
-import { countLearnInOneMonth } from "@/common/httpService";
+import { countLearnInOneWeek, getLearnContent } from "@/common/httpService";
 export default {
+  props: {
+    learnContent: {
+      type: String,
+      default: "",
+    },
+  },
   name: "",
   data() {
     return {
       monthChart: {},
-      optionData: { daysInMonth: [], valueList: [] },
-      queryParams: {
-        year: 0,
-        month: 0,
+      optionData: {
+        daysInWeek: ["一", "二", "三", "四", "五", "六", "日"],
+        valueInWeek: [],
       },
+      weekIndex: 0,
+      weekDayScopeInfo: null,
       total: 0, // 本月运动总里程
       totalTimes: 0, // 本月总运动总次数
       curYearMonth: 0, //当前月，随着切换会变化
       realCurYearMonth: 0, // 真正的当前月，不会随着切换变化
-      curYearMonthInfo: null, // 当前年月信息，如：2021年2月
     };
   },
   methods: {
     init() {
-      let date = new Date();
-      this.setDateInfo(date);
-      this.realCurYearMonth = this.curYearMonth;
-
       this.countByMonth();
     },
     countByMonth() {
-      countLearnInOneMonth(this.queryParams)
+      countLearnInOneWeek(this.weekIndex, this.learnContent)
         .then((res) => {
           if (!res || !res.data) {
             this.$message.warning("查询不到月度数据");
           }
           if (res.status == 200 && res.data) {
-            this.optionData.daysInMonth = res.data.units;
-            this.optionData.valueList = res.data.valueList;
+            this.optionData.valueInWeek = res.data.valueList;
+            this.weekDayScopeInfo = res.data.weekDayScope;
             this.totalTimes = res.data.totalTimes;
             this.total = res.data.total;
           }
@@ -86,30 +80,17 @@ export default {
           this.drawMonths(this.optionData);
         });
     },
-    preMonth() {
-      let curDate = new Date(this.queryParams.year, this.queryParams.month - 1);
-      curDate.setMonth(curDate.getMonth() - 1);
-      this.setDateInfo(curDate);
+    preWeek() {
+      this.weekIndex = this.weekIndex - 1;
       this.countByMonth();
     },
-    nextMonth() {
-      let curDate = new Date(this.queryParams.year, this.queryParams.month - 1);
-      curDate.setMonth(curDate.getMonth() + 1);
-      this.setDateInfo(curDate);
+    nextWeek() {
+      this.weekIndex = this.weekIndex + 1;
       this.countByMonth();
-    },
-    setDateInfo(date) {
-      let curYear = date.getFullYear();
-      let curMonth = date.getMonth() + 1;
-
-      this.queryParams.year = curYear;
-      this.queryParams.month = curMonth;
-      this.curYearMonth = curYear * 100 + curMonth;
-      this.curYearMonthInfo = curYear + "年" + curMonth + "月";
     },
     drawMonths(optionData) {
       this.monthChart = this.$echarts.init(
-        document.getElementById("learnMonthCountId")
+        document.getElementById("learnWeekCountId")
       );
       let optionTrend = {
         color: "#c23531",
@@ -141,7 +122,7 @@ export default {
         xAxis: {
           // name: "每天",
           type: "category",
-          data: optionData.daysInMonth,
+          data: optionData.daysInWeek,
         },
         yAxis: {
           type: "value",
@@ -167,7 +148,7 @@ export default {
           {
             // name: optionData.total,
             type: "bar",
-            data: optionData.valueList,
+            data: optionData.valueInWeek,
             stack: "stock",
             barMaxWidth: 20,
             label: {

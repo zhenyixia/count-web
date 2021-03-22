@@ -31,6 +31,9 @@ export const getRunList = (params) => {
 export const countRunInOneMonth = (params) => {
   return axios.post('run/countInOneMonth', params).then(res => res.data)
 }
+export const countRunInOneWeek = (params) => {
+  return axios.get('run/countInOneWeek?weekIndex=' + params).then(res => res.data)
+}
 export const countRunInOneYear = (params) => {
   return axios.post('run/countInOneYear', params).then(res => res.data)
 }
@@ -48,7 +51,7 @@ export const addRunData = (params) => {
 
 // 获取年月范围，可能不需要，待删除 -- 2021/2/2
 export const getRunYearMonthScope = () => {
-  return axios.get('run/getYearMonthScope').then(res=>res.data)
+  return axios.get('run/getYearMonthScope').then(res => res.data)
 }
 export const importRunData = axios.defaults.baseURL + '/run/import';
 
@@ -75,9 +78,13 @@ export const countLearnInOneYear = (params) => {
 export const countLearnAllYears = () => {
   return axios.get('learn/countAllYears').then(res => res.data)
 }
-// 获取已有的跑步地址
+// 获取已有的学习内容
 export const getLearnContent = () => {
   return axios.get('learn/getExistedContent').then(res => res.data)
+}
+
+export const countLearnInOneWeek = (param1,param2) => {
+  return axios.get('learn/countWeek?weekIndex=' + param1 + '&learnContent=' + param2).then(res => res.data)
 }
 
 export const addLearnData = (params) => {

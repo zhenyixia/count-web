@@ -1,11 +1,57 @@
 <template>
   <div>
-    <div>
+    <div
+      style="
+        display: inline-block;
+        float: left;
+        width: 100%;
+        height: 30px;
+        margin-top: 0px;
+      "
+    >
+      <span style="float: left; display: inline-block; margin-left: 300px"
+        >跑步统计</span
+      >
+      <span style="float: left; display: inline-block; margin-left: 550px">{{ this.learnContent }} 学习统计</span>
+        <el-button
+          icon="el-icon-open"
+          size="mini"
+          type="primary"
+          style="float: left; display: inline-block; margin-left: 50px"
+          @click="changeLearnCount()"
+          >切换全部</el-button
+        >
+    </div>
+    <div
+      style="
+        display: inline-block;
+        float: left;
+        width: 100%;
+        height: 250px;
+        margin-top: 15px;
+      "
+    >
+      <run-week-count ref="runWeekCountRef"></run-week-count>
+      <learn-week-count
+        ref="learnWeekCountRef"
+        :learnContent="learnContent"
+      ></learn-week-count>
+    </div>
+    <div
+      style="
+        display: inline-block;
+        float: left;
+        width: 100%;
+        height: 250px;
+        margin-top: 15px;
+      "
+    >
       <run-month-count ref="runMonthCount"></run-month-count>
+      <learn-month-count ref="learnMonthCountRef"></learn-month-count>
     </div>
-    <div>
-      <learn-month-count ref="learnMonthCount"></learn-month-count>
-    </div>
+    <!-- <div>
+      
+    </div> -->
     <!-- 跑步操作按钮 -->
     <div style="display: inline-block; float: left; margin-top: 15px">
       <el-button
@@ -34,7 +80,14 @@
     </div>
 
     <!-- 学习操作按钮 -->
-    <div style="display: inline-block; float: right; margin-top: 15px">
+    <div
+      style="
+        display: inline-block;
+        float: right;
+        margin-right: 355px;
+        margin-top: 15px;
+      "
+    >
       <el-button
         icon="el-icon-plus"
         type="primary"
@@ -160,12 +213,16 @@ import {
   importRunData,
   downloadRunDataTemplate,
   exportRunData,
+  getLearnContent,
 } from "@/common/httpService";
 import RunMonthCount from "./RunCount/CountChartInMonth";
+import RunWeekCount from "./RunCount/CountChartInWeek";
 import EnterRunDate from "./RunCount/EnterDateDialog";
 import OneYearRunCount from "./RunCount/CountChartInYear";
 import AllYearRunCount from "./RunCount/CountChartAllYears";
+
 import LearnMonthCount from "./LearnCount/CountChartInMonth";
+import LearnWeekCount from "./LearnCount/CountChartInWeek";
 import EnterLearnDate from "./LearnCount/EnterDateDialog";
 import OneYearLearnCount from "./LearnCount/CountChartInYear";
 import AllYearLearnCount from "./LearnCount/CountChartAllYears";
@@ -174,6 +231,7 @@ export default {
     // 跑步统计组件
     EnterRunDate: EnterRunDate,
     RunMonthCount: RunMonthCount,
+    RunWeekCount: RunWeekCount,
     OneYearRunCount: OneYearRunCount,
     AllYearRunCount: AllYearRunCount,
 
@@ -182,6 +240,7 @@ export default {
     OneYearLearnCount: OneYearLearnCount,
     AllYearLearnCount: AllYearLearnCount,
     LearnMonthCount: LearnMonthCount,
+    LearnWeekCount: LearnWeekCount,
   },
   data() {
     return {
@@ -205,23 +264,26 @@ export default {
       showCountAllYearsLearnDialog: false,
       showCountOneYearLearnDialog: false,
       showEnterLearnDataDialog: false,
+      learnContentOptions: [],
+      learnContent: "init",
+      latestLearnContent: "",
     };
   },
   //默认加载的方法
   created() {
-    this.getListFunc();
+    this.getLearnContentOptions();
   },
 
   methods: {
-    getListFunc() {
-      getRunList(this.queryParams)
+    getLearnContentOptions() {
+      getLearnContent()
         .then((res) => {
           if (!res) {
             this.$message.error("查询数据为空");
           }
           if (res.status == 200 && res.data) {
-            this.tableData = res.data.list;
-            this.queryParams.total = res.data.total;
+            this.learnContent = res.data[0];
+            this.latestLearnContent = res.data[0];
           } else {
             this.$message.error(res.message);
           }
@@ -229,6 +291,13 @@ export default {
         .catch((error) => {
           this.$message.error(error.response.data.message);
         });
+    },
+
+    changeLearnCount() {
+      this.learnContent = "";
+      this.$nextTick(() => {
+        this.$refs.learnWeekCountRef.init();
+      });
     },
 
     handleSizeChange(val) {

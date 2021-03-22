@@ -1,31 +1,31 @@
 <template>
   <div>
-    <div style="float:left;">
+    <div style="float:left;width:650px; height:250px;">
       <div style="position:relative;float:left;margin-bottom:0px;">
-        <span style="margin-left:10px;">跑步统计</span>
+        <!-- <span style="margin-left:10px;">跑步统计</span> -->
         <el-button
           icon="el-icon-arrow-left"
           size="mini"
           type="primary"
-          style="margin-left:70px;"
+          style="margin-left:0px;"
           :disabled="curYearMonth<=202101"
           @click="preMonth()"
         >前一月</el-button>
-        <span style="margin-left:70px;">{{curYearMonthInfo}}</span>
+        <span style="margin-left: 20px;">{{curYearMonthInfo}}</span>
         <el-button
           type="primary"
           size="mini"
-          style="margin-left:70px;"
+          style="margin-left: 20px;"
           :disabled="curYearMonth >= realCurYearMonth"
           @click="nextMonth()"
         >
           后一月
           <i class="el-icon-arrow-right el-icon--right"></i>
         </el-button>
-        <span style="margin-left:170px;">共运动{{totalTimes}}次</span>
-        <span style="margin-left:170px;">{{total}}公里</span>
+        <span style="margin-left:195px;">共运动{{totalTimes}}次</span>
+        <span style="margin-left:50px;">{{total}}公里</span>
       </div>
-      <div id="monthCountId" style="float:left;width:1310px;height:220px;margin-top:-5px;"></div>
+      <div id="monthCountId" style="float:left;width:100%;height:100%;margin-top:-5px;"></div>
     </div>
   </div>
 </template>
@@ -149,8 +149,8 @@ export default {
           right: 100,
           bottom: 30,
           top: 60,
-          height: 110,
-          width: 1150
+          height: '40%',
+          width: '95%'
         },
         series: [
           {

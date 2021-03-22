@@ -278,8 +278,8 @@ export default {
           this.$message.error(error.response.data.message);
         })
         .finally(() => {
-          this.$parent.getListFunc();
           this.$parent.$refs["learnMonthCount"].init();
+          this.$parent.$refs["learnWeekCount"].init();
         });
     },
   },
