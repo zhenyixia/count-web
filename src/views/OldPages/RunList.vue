@@ -4,17 +4,8 @@
       <month-chart-count ref="monthChartCount"></month-chart-count>
     </div>
     <div>
-      <el-table
-        :data="tableData"
-        :stripe="true"
-        :fit="true"
-        :cell-style="{padding:'9px 0'}"
-        :row-style="{height:'8px'}"
-        style="font-size: 10px"
-        :height="400"
-        :max-height="250"
-        highlight-current-row
-      >
+      <el-table :data="tableData" :stripe="true" :fit="true" :cell-style="{padding:'9px 0'}" :row-style="{height:'8px'}" style="font-size: 10px"
+        :height="400" :max-height="250" highlight-current-row>
         <!-- <el-table-column type="selection" width="55"></el-table-column> -->
         <el-table-column prop="id" label="ID" align="center"></el-table-column>
         <el-table-column prop="kilometer" label="距离" align="center"></el-table-column>
@@ -25,16 +16,9 @@
         <el-table-column prop="runDate" label="运动日期" align="center"></el-table-column>
       </el-table>
       <div style="display:inline-block;float:left;margin-top:15px;">
-        <el-button icon="el-icon-plus" type="primary"  size="small" @click.stop="enterRunData()">录入数据</el-button>
+        <el-button icon="el-icon-plus" type="primary" size="small" @click.stop="enterRunData()">录入数据</el-button>
         <el-button icon="el-icon-download" type="primary" size="small" style="margin-left:0px;" @click="exportTemplate">录入模板</el-button>
-        <el-upload
-          style="display:inline-block"
-          class="upload-demo"
-          :action="importRunData"
-          name="file"
-          :limit="1"
-          :on-success="afterImport"
-        >
+        <el-upload style="display:inline-block" class="upload-demo" :action="importRunData" name="file" :limit="1" :on-success="afterImport">
           <el-button icon="el-icon-upload2" type="primary" size="small">批量导入</el-button>
         </el-upload>
 
@@ -49,16 +33,9 @@
       <div style="display:inline-block;float:right;margin-top:15px;">
         <!-- 分页 开始 -->
         <div class="page">
-          <el-pagination
-            background
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="this.queryParams.total"
-            :current-page="this.queryParams.pageNum"
-            :page-size="this.queryParams.pageSize"
-            :page-sizes="[10, 15, 20, 50]"
-          ></el-pagination>
+          <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            layout="total, sizes, prev, pager, next, jumper" :total="this.queryParams.total" :current-page="this.queryParams.pageNum"
+            :page-size="this.queryParams.pageSize" :page-sizes="[10, 15, 20, 50]"></el-pagination>
         </div>
       </div>
     </div>
@@ -71,7 +48,7 @@ import {
   getRunList,
   importRunData,
   downloadRunDataTemplate,
-  exportRunData
+  exportRunData,
 } from "@/common/httpService";
 import EnterRunDate from "./../RunCount/EnterDateDialog";
 import monthChartCount from "./../RunCount/CountChartInMonth";
@@ -82,7 +59,7 @@ export default {
     EnterRunDate: EnterRunDate,
     MonthChartCount: monthChartCount,
     YearChartCount: yearChartCount,
-    AllYearChartCount: allYearChartCount
+    AllYearChartCount: allYearChartCount,
   },
   data() {
     return {
@@ -94,14 +71,14 @@ export default {
         month: 0,
         pageNum: 1, //当前页号
         pageSize: 10, //每页大小
-        total: 100 //总条数
+        total: 100, //总条数
       },
       //展示录入跑步数据弹出框
       showEnterRunDataDialog: false,
       showYearCountDialog: false,
       showAllYearsCountDialog: false,
       downloadTemplate: downloadRunDataTemplate,
-      importRunData: importRunData
+      importRunData: importRunData,
     };
   },
   //默认加载的方法
@@ -112,7 +89,7 @@ export default {
   methods: {
     getListFunc() {
       getRunList(this.queryParams)
-        .then(res => {
+        .then((res) => {
           if (!res) {
             this.$message.error("查询数据为空");
           }
@@ -123,7 +100,7 @@ export default {
             this.$message.error(res.message);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           this.$message.error(error.response.data.message);
         });
     },
@@ -169,9 +146,9 @@ export default {
     },
     // 导出数据
     exportData() {
-      exportRunData(this.queryParams).then(res => {
+      exportRunData(this.queryParams).then((res) => {
         var blob = new Blob([res.data], {
-          type: "application/msword;charset=utf-8"
+          type: "application/msword;charset=utf-8",
         });
         var filename = "download.xlsx";
         var a = document.createElement("a");
@@ -185,7 +162,7 @@ export default {
         window.URL.revokeObjectURL(url);
         this.$message.success("下载成功");
       });
-    }
-  }
+    },
+  },
 };
 </script>

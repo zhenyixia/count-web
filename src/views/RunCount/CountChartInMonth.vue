@@ -3,22 +3,10 @@
     <div style="float:left;width:650px; height:250px;">
       <div style="position:relative;float:left;margin-bottom:0px;">
         <!-- <span style="margin-left:10px;">跑步统计</span> -->
-        <el-button
-          icon="el-icon-arrow-left"
-          size="mini"
-          type="primary"
-          style="margin-left:0px;"
-          :disabled="curYearMonth<=202101"
-          @click="preMonth()"
-        >前一月</el-button>
+        <el-button icon="el-icon-arrow-left" size="mini" type="primary" style="margin-left:0px;" :disabled="curYearMonth<=202101" @click="preMonth()">
+          前一月</el-button>
         <span style="margin-left: 20px;">{{curYearMonthInfo}}</span>
-        <el-button
-          type="primary"
-          size="mini"
-          style="margin-left: 20px;"
-          :disabled="curYearMonth >= realCurYearMonth"
-          @click="nextMonth()"
-        >
+        <el-button type="primary" size="mini" style="margin-left: 20px;" :disabled="curYearMonth >= realCurYearMonth" @click="nextMonth()">
           后一月
           <i class="el-icon-arrow-right el-icon--right"></i>
         </el-button>
@@ -41,13 +29,13 @@ export default {
       optionData: { daysInMonth: [], kmInMonth: [] },
       queryParams: {
         year: 0,
-        month: 0
+        month: 0,
       },
       total: 0, // 本月运动总里程
       totalTimes: 0, // 本月总运动总次数
       curYearMonth: 0, //当前月，随着切换会变化
       realCurYearMonth: 0, // 真正的当前月，不会随着切换变化
-      curYearMonthInfo: null // 当前年月信息，如：2021年2月
+      curYearMonthInfo: null, // 当前年月信息，如：2021年2月
     };
   },
   methods: {
@@ -60,7 +48,7 @@ export default {
     },
     countByMonth() {
       countRunInOneMonth(this.queryParams)
-        .then(res => {
+        .then((res) => {
           if (!res || !res.data) {
             this.$message.warning("查询不到月度数据");
           }
@@ -110,7 +98,7 @@ export default {
           trigger: "axis",
           axisPointer: {
             // type: "shadow"
-          }
+          },
           // formatter: param => {
           //   let data = `${param[0].name}`;
           //   for (let i in param) {
@@ -124,13 +112,13 @@ export default {
         },
         legend: {
           // data: ["按周统计"],
-          textStyle: { fontSize: 16 }
+          textStyle: { fontSize: 16 },
           // right: "100"
         },
         xAxis: {
           // name: "每天",
           type: "category",
-          data: optionData.daysInMonth
+          data: optionData.daysInMonth,
         },
         yAxis: {
           type: "value",
@@ -140,8 +128,8 @@ export default {
           axisLabel: {
             textStyle: { fontSize: 16 },
             formatter: "{value}",
-            interval: 3
-          }
+            interval: 3,
+          },
         },
         // 整体统计图表格的位置，及高宽
         grid: {
@@ -149,8 +137,8 @@ export default {
           right: 100,
           bottom: 30,
           top: 60,
-          height: '40%',
-          width: '95%'
+          height: "40%",
+          width: "95%",
         },
         series: [
           {
@@ -165,31 +153,31 @@ export default {
               fontSize: 14,
 
               color: "#556575",
-              formatter: params => {
+              formatter: (params) => {
                 return params.value == 0 ? "" : params.value;
-              }
+              },
             },
             itemStyle: {
-              color: "#007ADB"
-            }
+              color: "#007ADB",
+            },
             // showBackground: true,
             // backgroundStyle: {
             //   color: "rgba(180, 180, 180, 0.2)"
             // }
-          }
-        ]
+          },
+        ],
       };
       this.monthChart.setOption(optionTrend);
     },
     resize(chart) {
-      window.addEventListener("resize", function() {
+      window.addEventListener("resize", function () {
         chart.resize();
       });
-    }
+    },
   },
   mounted() {
     this.init();
-  }
+  },
 };
 </script>
 <style scoped>

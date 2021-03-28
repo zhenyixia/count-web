@@ -1,42 +1,20 @@
 <template>
   <div>
     <div style="float: right; width: 660px; height: 250px; margin-right: 13px">
-      <div style="float: left;margin-bottom:0px;">
+      <div style="float: left; margin-bottom: 0px">
         <!-- <div style="position:relative;float:left;margin-bottom:0px;"> -->
         <!-- <span style="margin-left:10px;">学习统计</span> -->
-        <el-button
-          icon="el-icon-arrow-left"
-          size="mini"
-          type="primary"
-          style="margin-left: 0px;"
-          :disabled="curYearMonth <= 202103"
-          @click="preMonth()"
-          >前一月</el-button
-        >
-        <span style="margin-left: 20px;">{{ curYearMonthInfo }}</span>
-        <el-button
-          type="primary"
-          size="mini"
-          style="margin-left: 20px;"
-          :disabled="curYearMonth >= realCurYearMonth"
-          @click="nextMonth()"
-        >
+        <el-button icon="el-icon-arrow-left" size="mini" type="primary" style="margin-left: 0px" :disabled="curYearMonth <= 202103"
+          @click="preMonth()">前一月</el-button>
+        <span style="margin-left: 20px">{{ curYearMonthInfo }}</span>
+        <el-button type="primary" size="mini" style="margin-left: 20px" :disabled="curYearMonth >= realCurYearMonth" @click="nextMonth()">
           后一月
           <i class="el-icon-arrow-right el-icon--right"></i>
         </el-button>
         <span style="margin-left: 150px">共学习{{ totalTimes }}次</span>
         <span style="margin-left: 50px">{{ total }}小时</span>
       </div>
-      <div
-        id="learnMonthCountId"
-        style="
-          float: right;
-          width: 100%;
-          height: 100%;
-          margin-top: -5px;
-          margin-right: 15px;
-        "
-      ></div>
+      <div id="learnMonthCountId" style="float:right; width:100%; height:100%; margin-top:-5px; margin-right:15px; "></div>
     </div>
   </div>
 </template>
@@ -46,6 +24,10 @@ import { deepClone } from "@/common/util";
 import { countLearnInOneMonth } from "@/common/httpService";
 export default {
   name: "",
+  props: {
+    learnContent: String,
+    required: true,
+  },
   data() {
     return {
       monthChart: {},

@@ -1,31 +1,11 @@
 <template>
   <div>
-    <el-dialog
-      title="统计一年"
-      :visible.sync="modalShow"
-      top="1%"
-      width="700px"
-      height="500px"
-      :before-close="modalClose"
-      class="elDialogBody"
-    >
+    <el-dialog title="统计一年" :visible.sync="modalShow" top="1%" width="700px" height="500px" :before-close="modalClose" class="elDialogBody">
       <div>
         <div style="position:relative;margin-bottom:0px;">
-          <el-button
-            icon="el-icon-arrow-left"
-            size="mini"
-            type="primary"
-            :disabled="curYear<=2021"
-            @click="preYear()"
-          >前一年</el-button>
+          <el-button icon="el-icon-arrow-left" size="mini" type="primary" :disabled="curYear<=2021" @click="preYear()">前一年</el-button>
           <span style="margin-left:40px;">{{curYear}}年</span>
-          <el-button
-            type="primary"
-            size="mini"
-            style="margin-left:40px;"
-            :disabled="curYear >= realCurYear"
-            @click="nextYear()"
-          >
+          <el-button type="primary" size="mini" style="margin-left:40px;" :disabled="curYear >= realCurYear" @click="nextYear()">
             后一年
             <i class="el-icon-arrow-right el-icon--right"></i>
           </el-button>
@@ -53,12 +33,12 @@ export default {
       optionData: { daysInMonth: [], kmInMonth: [] },
       queryParams: {
         year: 0,
-        month: 0
+        month: 0,
       },
       total: 0, // 本年运动总里程
       totalTimes: 0, // 本年总运动总次数
       curYear: 0, //当前年，随着切换会变化
-      realCurYear: 0 // 真正的当前年，不会随着切换变化
+      realCurYear: 0, // 真正的当前年，不会随着切换变化
     };
   },
   methods: {
@@ -76,7 +56,7 @@ export default {
     },
     countInYear() {
       countRunInOneYear(this.queryParams)
-        .then(res => {
+        .then((res) => {
           if (!res || !res.data) {
             this.$message.warning("查询不到年度数据");
           }
@@ -114,7 +94,7 @@ export default {
           trigger: "axis",
           axisPointer: {
             // type: "shadow"
-          }
+          },
           // formatter: param => {
           //   let data = `${param[0].name}`;
           //   for (let i in param) {
@@ -128,13 +108,13 @@ export default {
         },
         legend: {
           // data: ["按周统计"],
-          textStyle: { fontSize: 16 }
+          textStyle: { fontSize: 16 },
           // right: "100"
         },
         xAxis: {
           // name: "每天",
           type: "category",
-          data: optionData.daysInMonth
+          data: optionData.daysInMonth,
         },
         yAxis: {
           type: "value",
@@ -144,18 +124,18 @@ export default {
           axisLabel: {
             textStyle: { fontSize: 16 },
             formatter: "{value}",
-            interval: 3
-          }
+            interval: 3,
+          },
         },
         // 整体统计图表格的位置，及高宽
         grid: {
           left: 25,
           // right: 0,
-        //   bottom: 30,
-        //   top: 60,
+          //   bottom: 30,
+          //   top: 60,
           height: 210,
-          width: 600
-          },
+          width: 600,
+        },
         series: [
           {
             // name: optionData.total,
@@ -169,31 +149,31 @@ export default {
               fontSize: 14,
 
               color: "#556575",
-              formatter: params => {
+              formatter: (params) => {
                 return params.value == 0 ? "" : params.value;
-              }
+              },
             },
             itemStyle: {
-              color: "#007ADB"
-            }
+              color: "#007ADB",
+            },
             // showBackground: true,
             // backgroundStyle: {
             //   color: "rgba(180, 180, 180, 0.2)"
             // }
-          }
-        ]
+          },
+        ],
       };
       this.yearChart.setOption(optionTrend);
     },
     resize(chart) {
-      window.addEventListener("resize", function() {
+      window.addEventListener("resize", function () {
         chart.resize();
       });
-    }
+    },
   },
   mounted() {
     this.init();
-  }
+  },
 };
 </script>
 <style scoped>

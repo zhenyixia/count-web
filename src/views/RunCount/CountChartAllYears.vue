@@ -1,14 +1,6 @@
 <template>
   <div>
-    <el-dialog
-      title="统计所有年"
-      :visible.sync="modalShow"
-      top="1%"
-      width="700px"
-      height="500px"
-      :before-close="modalClose"
-      class="elDialogBody"
-    >
+    <el-dialog title="统计所有年" :visible.sync="modalShow" top="1%" width="700px" height="500px" :before-close="modalClose" class="elDialogBody">
       <div>
         <div id="allYearsCountId" style="width:650px;height:300px;"></div>
         <div style="margin-top:20px;">
@@ -28,7 +20,7 @@ export default {
     return {
       modalShow: false,
       yearChart: {},
-      optionData: { daysInMonth: [], kmInMonth: [],optionData:0 },
+      optionData: { daysInMonth: [], kmInMonth: [], optionData: 0 },
     };
   },
   methods: {
@@ -39,7 +31,7 @@ export default {
     init() {
       this.modalShow = true;
       countRunAllYears()
-        .then(res => {
+        .then((res) => {
           if (!res || !res.data) {
             this.$message.warning("查询不到年度数据");
           }
@@ -64,17 +56,17 @@ export default {
           trigger: "axis",
           axisPointer: {
             // type: "shadow"
-          }
+          },
         },
         legend: {
           // data: ["按周统计"],
-          textStyle: { fontSize: 16 }
+          textStyle: { fontSize: 16 },
           // right: "100"
         },
         xAxis: {
           // name: "每天",
           type: "category",
-          data: optionData.daysInMonth
+          data: optionData.daysInMonth,
         },
         yAxis: {
           type: "value",
@@ -84,8 +76,8 @@ export default {
           axisLabel: {
             textStyle: { fontSize: 16 },
             formatter: "{value}",
-            interval: 3
-          }
+            interval: 3,
+          },
         },
         // 整体统计图表格的位置，及高宽
         grid: {
@@ -94,11 +86,11 @@ export default {
           //   bottom: 30,
           //   top: 60,
           height: 210,
-          width: 600
+          width: 600,
         },
         series: [
           {
-            name: "总计 " +optionData.total + " 公里",
+            name: "总计 " + optionData.total + " 公里",
             type: "bar",
             data: optionData.kmInMonth,
             stack: "stock",
@@ -109,31 +101,31 @@ export default {
               fontSize: 14,
 
               color: "#556575",
-              formatter: params => {
+              formatter: (params) => {
                 return params.value == 0 ? "" : params.value;
-              }
+              },
             },
             itemStyle: {
-              color: "#007ADB"
-            }
+              color: "#007ADB",
+            },
             // showBackground: true,
             // backgroundStyle: {
             //   color: "rgba(180, 180, 180, 0.2)"
             // }
-          }
-        ]
+          },
+        ],
       };
       this.yearChart.setOption(optionTrend);
     },
     resize(chart) {
-      window.addEventListener("resize", function() {
+      window.addEventListener("resize", function () {
         chart.resize();
       });
-    }
+    },
   },
   mounted() {
     this.init();
-  }
+  },
 };
 </script>
 <style scoped>

@@ -1,207 +1,65 @@
 <template>
-  <div>
-    <div
-      style="
-        display: inline-block;
-        float: left;
-        width: 100%;
-        height: 30px;
-        margin-top: 0px;
-      "
-    >
-      <span style="float: left; display: inline-block; margin-left: 300px"
-        >跑步统计</span
-      >
-      <span style="float: left; display: inline-block; margin-left: 550px"
-        >{{ this.learnContent }} 学习统计</span
-      >
-      <el-button
-        icon="el-icon-open"
-        size="mini"
-        type="primary"
-        style="float: left; display: inline-block; margin-left: 50px"
-        @click="changeLearnCount()"
-        >{{ changeAllOrLatest }}</el-button
-      >
+  <div style="backgroud:176, 203, 219;">
+    <div style="display: inline-block;float: left; width: 100%; height: 30px;margin-top: 0px;">
+      <span style="float: left; display: inline-block; margin-left: 300px">跑步统计</span>
+      <span style="float: left; display: inline-block; margin-left: 550px">{{ this.learnContent }} 学习统计</span>
+      <el-button icon="el-icon-open" size="mini" type="primary" style="float: left; display: inline-block; margin-left: 50px"
+        @click="changeLearnCount()">{{ changeAllOrLatest }}</el-button>
     </div>
-    <div
-      style="
-        display: inline-block;
-        float: left;
-        width: 100%;
-        height: 250px;
-        margin-top: 15px;
-      "
-    >
+    <div style="display: inline-block;float: left;width: 100%;height: 250px;margin-top: 15px;">
       <run-week-count ref="runWeekCountRef"></run-week-count>
-      <learn-week-count
-        ref="learnWeekCountRef"
-        :learnContent="learnContent"
-      ></learn-week-count>
+      <learn-week-count ref="learnWeekCountRef" :learnContent="learnContent"></learn-week-count>
     </div>
-    <div
-      style="
-        display: inline-block;
-        float: left;
-        width: 100%;
-        height: 250px;
-        margin-top: 15px;
-      "
-    >
+    <div style="display: inline-block;float: left;width: 100%;height: 250px;margin-top: 15px;">
       <run-month-count ref="runMonthCount"></run-month-count>
       <learn-month-count ref="learnMonthCountRef"></learn-month-count>
     </div>
     <!-- <div>
       
-    </div> -->
+    </div>-->
     <!-- 跑步操作按钮 -->
     <div style="display: inline-block; float: left; margin-top: 15px">
-      <el-button
-        icon="el-icon-plus"
-        type="primary"
-        size="small"
-        @click.stop="enterRunData()"
-        >录入数据</el-button
-      >
-      <el-button
-        icon="el-icon-s-data"
-        type="primary"
-        size="small"
-        style="margin-left: 0px"
-        @click="countRunInYear()"
-        >统计一年</el-button
-      >
-      <el-button
-        icon="el-icon-s-data"
-        type="primary"
-        size="small"
-        style="margin-left: 0px"
-        @click="countRunAllYears()"
-        >统计所有</el-button
-      >
+      <el-button icon="el-icon-plus" type="primary" size="small" @click.stop="enterRunData()">录入数据</el-button>
+      <el-button icon="el-icon-s-data" type="primary" size="small" style="margin-left: 0px" @click="countRunInYear()">统计一年</el-button>
+      <el-button icon="el-icon-s-data" type="primary" size="small" style="margin-left: 0px" @click="countRunAllYears()">统计所有</el-button>
     </div>
 
     <!-- 学习操作按钮 -->
-    <div
-      style="
-        display: inline-block;
-        float: right;
-        margin-right: 355px;
-        margin-top: 15px;
-      "
-    >
-      <el-button
-        icon="el-icon-plus"
-        type="primary"
-        size="small"
-        @click.stop="enterLearnData()"
-        >录入数据</el-button
-      >
-      <el-button
-        icon="el-icon-s-data"
-        type="primary"
-        size="small"
-        style="margin-left: 0px"
-        @click="countOneYearLearn()"
-        >统计一年</el-button
-      >
-      <el-button
-        icon="el-icon-s-data"
-        type="primary"
-        size="small"
-        style="margin-left: 0px"
-        @click="countAllYearsLearn()"
-        >统计所有</el-button
-      >
+    <div style="display: inline-block;float: right;margin-right: 355px;margin-top: 15px;">
+      <el-button icon="el-icon-plus" type="primary" size="small" @click.stop="enterLearnData()">录入数据</el-button>
+      <el-button icon="el-icon-s-data" type="primary" size="small" style="margin-left: 0px" @click="countOneYearLearn()">统计一年</el-button>
+      <el-button icon="el-icon-s-data" type="primary" size="small" style="margin-left: 0px" @click="countAllYearsLearn()">统计所有</el-button>
     </div>
     <!-- 跑步对话弹出框 -->
     <div>
-      <enter-run-date
-        v-if="showEnterRunDataDialog"
-        ref="enterRunDate"
-      ></enter-run-date>
-      <one-year-run-count
-        v-if="showRunYearCountDialog"
-        ref="oneYearRunCount"
-      ></one-year-run-count>
-      <all-year-run-count
-        v-if="showRunAllYearsCountDialog"
-        ref="allYearsChartCountRef"
-      ></all-year-run-count>
+      <enter-run-date v-if="showEnterRunDataDialog" ref="enterRunDate"></enter-run-date>
+      <one-year-run-count v-if="showRunYearCountDialog" ref="oneYearRunCount"></one-year-run-count>
+      <all-year-run-count v-if="showRunAllYearsCountDialog" ref="allYearsChartCountRef"></all-year-run-count>
     </div>
     <!-- 学习对话弹出框 -->
     <div>
-      <enter-learn-date
-        v-if="showEnterLearnDataDialog"
-        ref="enterLearnDateRef"
-      ></enter-learn-date>
-      <one-year-learn-count
-        v-if="showCountOneYearLearnDialog"
-        ref="countOneYearLearnRef"
-      ></one-year-learn-count>
-      <all-year-learn-count
-        v-if="showCountAllYearsLearnDialog"
-        ref="countAllYearsLearnRef"
-      ></all-year-learn-count>
+      <enter-learn-date v-if="showEnterLearnDataDialog" ref="enterLearnDateRef"></enter-learn-date>
+      <one-year-learn-count v-if="showCountOneYearLearnDialog" ref="countOneYearLearnRef"></one-year-learn-count>
+      <all-year-learn-count v-if="showCountAllYearsLearnDialog" ref="countAllYearsLearnRef"></all-year-learn-count>
     </div>
     <div v-if="false">
-      <el-table
-        :data="tableData"
-        :stripe="true"
-        :fit="true"
-        :cell-style="{ padding: '9px 0' }"
-        :row-style="{ height: '8px' }"
-        style="font-size: 10px"
-        :height="400"
-        :max-height="250"
-        highlight-current-row
-      >
+      <el-table :data="tableData" :stripe="true" :fit="true" :cell-style="{ padding: '9px 0' }" :row-style="{ height: '8px' }" style="font-size: 10px"
+        :height="400" :max-height="250" highlight-current-row>
         <!-- <el-table-column type="selection" width="55"></el-table-column> -->
         <el-table-column prop="id" label="ID" align="center"></el-table-column>
-        <el-table-column
-          prop="kilometer"
-          label="距离"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="address"
-          label="地址"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="runSecond"
-          label="运动时长"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="kmByHour"
-          label="速度-km/h"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="timeByKm"
-          label="平均配速-s/km"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="runDate"
-          label="运动日期"
-          align="center"
-        ></el-table-column>
+        <el-table-column prop="kilometer" label="距离" align="center"></el-table-column>
+        <el-table-column prop="address" label="地址" align="center"></el-table-column>
+        <el-table-column prop="runSecond" label="运动时长" align="center"></el-table-column>
+        <el-table-column prop="kmByHour" label="速度-km/h" align="center"></el-table-column>
+        <el-table-column prop="timeByKm" label="平均配速-s/km" align="center"></el-table-column>
+        <el-table-column prop="runDate" label="运动日期" align="center"></el-table-column>
       </el-table>
       <div style="display: inline-block; float: right; margin-top: 15px">
         <!-- 分页 开始 -->
         <div class="page">
-          <el-pagination
-            background
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="this.queryParams.total"
-            :current-page="this.queryParams.pageNum"
-            :page-size="this.queryParams.pageSize"
-            :page-sizes="[10, 15, 20, 50]"
-          ></el-pagination>
+          <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            layout="total, sizes, prev, pager, next, jumper" :total="this.queryParams.total" :current-page="this.queryParams.pageNum"
+            :page-size="this.queryParams.pageSize" :page-sizes="[10, 15, 20, 50]"></el-pagination>
         </div>
       </div>
     </div>
@@ -301,7 +159,7 @@ export default {
       if (this.changeAllOrLatest == "切换全部") {
         this.changeAllOrLatest = "切换最近";
         this.learnContent = "";
-      }else{
+      } else {
         this.changeAllOrLatest = "切换全部";
         this.learnContent = this.latestLearnContent;
       }
