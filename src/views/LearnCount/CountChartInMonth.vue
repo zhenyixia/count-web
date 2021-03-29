@@ -101,6 +101,8 @@ export default {
         // },
         tooltip: {
           trigger: "axis",
+          show: true,
+          transitionDuration:0,//echart防止tooltip的抖动
           axisPointer: {
             // type: "shadow"
           },
