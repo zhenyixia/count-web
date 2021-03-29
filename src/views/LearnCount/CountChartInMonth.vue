@@ -11,8 +11,8 @@
           后一月
           <i class="el-icon-arrow-right el-icon--right"></i>
         </el-button>
-        <span style="margin-left: 150px">本月学习{{ totalTimes }}次</span>
-        <span style="margin-left: 50px">共{{ total }}小时</span>
+        <span style="margin-left: 150px">学习{{ totalTimes }}次</span>
+        <span style="margin-left: 50px">{{ total }}小时</span>
       </div>
       <div id="learnMonthCountId" style="float:left; width:100%; height:100%; margin-top:-5px; margin-right:15px; "></div>
     </div>

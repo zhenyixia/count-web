@@ -1,15 +1,15 @@
 <template>
   <div style="backgroud:176, 203, 219;">
-    <div style="display: inline-block;float: left; width: 100%; height: 30px;margin-top: 0px;">
+    <div style="display: inline-block;float: left; width: 99%; height: 30px;margin-top: 0px;">
       <span style="float: left; display: inline-block; margin-left: 300px">跑步统计</span>
       <span style="float: left; display: inline-block; margin-left: 550px">学习统计--> {{ this.learnContent||'     ALL' }} </span>
 
     </div>
-    <div style="display: inline-block;float: left;width: 100%;height: 250px;margin-top: 15px;">
+    <div style="display: inline-block;float: left;width: 99%;height: 250px;margin-top: 15px;">
       <run-week-count ref="runWeekCountRef"></run-week-count>
       <learn-week-count ref="learnWeekCountRef" :learnContent="learnContent"></learn-week-count>
     </div>
-    <div style="display: inline-block;float: left;width: 100%;height: 250px;margin-top: 15px;">
+    <div style="display: inline-block;float: left;width: 99%;height: 250px;margin-top: 15px;">
       <run-month-count ref="runMonthCount"></run-month-count>
       <learn-month-count ref="learnMonthCountRef" :learnContent="learnContent"></learn-month-count>
     </div>
