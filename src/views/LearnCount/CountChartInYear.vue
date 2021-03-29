@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="统计一年" :visible.sync="modalShow" top="1%" width="700px" height="500px" :before-close="modalClose" class="elDialogBody">
+    <el-dialog title="统计一年(所有)" :visible.sync="modalShow" top="1%" width="700px" height="500px" :before-close="modalClose" class="elDialogBody">
       <div>
         <div style="position:relative;margin-bottom:0px;">
           <el-button icon="el-icon-arrow-left" size="mini" type="primary" :disabled="curYear<=2021" @click="preYear()">前一年</el-button>
@@ -33,7 +33,6 @@ export default {
       optionData: { daysInMonth: [], valueList: [] },
       queryParams: {
         year: 0,
-        month: 0,
       },
       total: 0, // 本年运动总里程
       totalTimes: 0, // 本年总运动总次数

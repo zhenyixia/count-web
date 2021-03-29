@@ -2,9 +2,8 @@
   <div style="backgroud:176, 203, 219;">
     <div style="display: inline-block;float: left; width: 100%; height: 30px;margin-top: 0px;">
       <span style="float: left; display: inline-block; margin-left: 300px">跑步统计</span>
-      <span style="float: left; display: inline-block; margin-left: 550px">{{ this.learnContent }} 学习统计</span>
-      <el-button icon="el-icon-open" size="mini" type="primary" style="float: left; display: inline-block; margin-left: 50px"
-        @click="changeLearnCount()">{{ changeAllOrLatest }}</el-button>
+      <span style="float: left; display: inline-block; margin-left: 550px">学习统计--> {{ this.learnContent||'     ALL' }} </span>
+
     </div>
     <div style="display: inline-block;float: left;width: 100%;height: 250px;margin-top: 15px;">
       <run-week-count ref="runWeekCountRef"></run-week-count>
@@ -12,7 +11,7 @@
     </div>
     <div style="display: inline-block;float: left;width: 100%;height: 250px;margin-top: 15px;">
       <run-month-count ref="runMonthCount"></run-month-count>
-      <learn-month-count ref="learnMonthCountRef"></learn-month-count>
+      <learn-month-count ref="learnMonthCountRef" :learnContent="learnContent"></learn-month-count>
     </div>
     <!-- <div>
       
@@ -25,10 +24,12 @@
     </div>
 
     <!-- 学习操作按钮 -->
-    <div style="display: inline-block;float: right;margin-right: 355px;margin-top: 15px;">
+    <div style="display: inline-block;float: left;margin-left: 405px;margin-top: 15px;">
       <el-button icon="el-icon-plus" type="primary" size="small" @click.stop="enterLearnData()">录入数据</el-button>
       <el-button icon="el-icon-s-data" type="primary" size="small" style="margin-left: 0px" @click="countOneYearLearn()">统计一年</el-button>
       <el-button icon="el-icon-s-data" type="primary" size="small" style="margin-left: 0px" @click="countAllYearsLearn()">统计所有</el-button>
+      <el-button icon="el-icon-open" type="primary" size="small" style="margin-left: 0px" @click="changeLearnCount()">{{ changeAllOrLatest }}
+      </el-button>
     </div>
     <!-- 跑步对话弹出框 -->
     <div>
@@ -165,6 +166,7 @@ export default {
       }
       this.$nextTick(() => {
         this.$refs.learnWeekCountRef.init();
+        this.$refs.learnMonthCountRef.init();
       });
     },
 

@@ -9,8 +9,8 @@
           下一周
           <i class="el-icon-arrow-right el-icon--right"></i>
         </el-button>
-        <span style="margin-left: 125px">共运动{{ totalTimes }}次</span>
-        <span style="margin-left: 50px">{{ total }}公里</span>
+        <span style="margin-left: 125px">本周运动{{ totalTimes }}次</span>
+        <span style="margin-left: 50px">共{{ total }}公里</span>
       </div>
       <div id="weekCountId" style="float: left; width: 100%; height: 100%; margin-top: -5px"></div>
     </div>
@@ -120,7 +120,7 @@ export default {
           bottom: 30,
           top: 60,
           height: "40%",
-          width: "95%",
+          width: "94%",
         },
         series: [
           {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="float: right; width: 660px; height: 250px; margin-right: 13px">
+    <div style="float: left; width: 650px; height: 250px; margin-left: 25px">
       <div style="float: left; margin-bottom: 0px">
         <!-- <div style="position:relative;float:left;margin-bottom:0px;"> -->
         <!-- <span style="margin-left:10px;">学习统计</span> -->
@@ -11,10 +11,10 @@
           后一月
           <i class="el-icon-arrow-right el-icon--right"></i>
         </el-button>
-        <span style="margin-left: 150px">共学习{{ totalTimes }}次</span>
-        <span style="margin-left: 50px">{{ total }}小时</span>
+        <span style="margin-left: 150px">本月学习{{ totalTimes }}次</span>
+        <span style="margin-left: 50px">共{{ total }}小时</span>
       </div>
-      <div id="learnMonthCountId" style="float:right; width:100%; height:100%; margin-top:-5px; margin-right:15px; "></div>
+      <div id="learnMonthCountId" style="float:left; width:100%; height:100%; margin-top:-5px; margin-right:15px; "></div>
     </div>
   </div>
 </template>
@@ -35,6 +35,7 @@ export default {
       queryParams: {
         year: 0,
         month: 0,
+        learnContent: ''
       },
       total: 0, // 本月运动总里程
       totalTimes: 0, // 本月总运动总次数
@@ -48,6 +49,7 @@ export default {
       let date = new Date();
       this.setDateInfo(date);
       this.realCurYearMonth = this.curYearMonth;
+      this.queryParams.learnContent = this.learnContent;
 
       this.countByMonth();
     },
@@ -145,7 +147,7 @@ export default {
           bottom: 30,
           top: 60,
           height: "40%",
-          width: "95%",
+          width: "94%",
         },
         series: [
           {

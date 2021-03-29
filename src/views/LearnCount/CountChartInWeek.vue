@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="float: right; width: 670px; height: 350px;margin-right: 13px">
+    <div style="float: left; width: 660px; height: 350px;margin-left: 25px">
       <div style="position: relative; float: left; margin-bottom: 0px">
         <el-button icon="el-icon-arrow-left" size="mini" type="primary" style="margin-left: 5px" :disabled="weekIndex <= -10" @click="preWeek()">上一周
         </el-button>
@@ -9,8 +9,8 @@
           下一周
           <i class="el-icon-arrow-right el-icon--right"></i>
         </el-button>
-        <span style="margin-left: 125px">共学习{{ totalTimes }}次</span>
-        <span style="margin-left: 50px">{{ total }}小时</span>
+        <span style="margin-left: 125px">本周学习{{ totalTimes }}次</span>
+        <span style="margin-left: 50px">共{{ total }}小时</span>
       </div>
       <div id="learnWeekCountId" style="float: left; width: 100%; height: 100%; margin-top: -5px"></div>
     </div>
@@ -128,7 +128,7 @@ export default {
           bottom: 30,
           top: 60,
           height: "40%",
-          width: "95%",
+          width: "94%",
         },
         series: [
           {

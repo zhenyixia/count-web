@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="统计所有年" :visible.sync="modalShow" top="1%" width="700px" height="500px" :before-close="modalClose" class="elDialogBody">
+    <el-dialog title="统计所有年（所有）" :visible.sync="modalShow" top="1%" width="700px" height="500px" :before-close="modalClose" class="elDialogBody">
       <div>
         <div id="allYearsCountId" style="width:650px;height:300px;"></div>
         <div style="margin-top:20px;">
