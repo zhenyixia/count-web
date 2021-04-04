@@ -1,9 +1,7 @@
 <template>
   <div>
     <div style="float: left; width: 650px; height: 250px; margin-left: 25px">
-      <div style="float: left; margin-bottom: 0px">
-        <!-- <div style="position:relative;float:left;margin-bottom:0px;"> -->
-        <!-- <span style="margin-left:10px;">学习统计</span> -->
+      <div style="position:relative;float: left; margin-bottom: 0px">
         <el-button icon="el-icon-arrow-left" size="mini" type="primary" style="margin-left: 0px" :disabled="curYearMonth <= 202103"
           @click="preMonth()">前一月</el-button>
         <span style="margin-left: 20px">{{ curYearMonthInfo }}</span>
@@ -35,7 +33,7 @@ export default {
       queryParams: {
         year: 0,
         month: 0,
-        learnContent: ''
+        learnContent: "",
       },
       total: 0, // 本月运动总里程
       totalTimes: 0, // 本月总运动总次数
@@ -104,7 +102,7 @@ export default {
         tooltip: {
           trigger: "axis",
           show: true,
-          transitionDuration:0,//echart防止tooltip的抖动
+          transitionDuration: 0, //echart防止tooltip的抖动
           axisPointer: {
             // type: "shadow"
           },
